@@ -255,6 +255,6 @@
 
 
 ;;; Modified from original: 
-;;; Moved down here R6RS because libraries require expressions after definitions
+;;; Moved down here because R6RS libraries require expressions after definitions
 (check-set-mode! 'report)
 (check-reset!)
