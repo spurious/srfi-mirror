@@ -9,8 +9,9 @@
     dispatch-union :generator-proc
     srfi-42:error-who)
   (import
+    (rnrs r5rs)
     (rename (rnrs) (error rnrs:error))
-    (only (ikarus) include make-parameter)
+    (only (ikarus) make-parameter)
     (srfi include-resolve))
   
   

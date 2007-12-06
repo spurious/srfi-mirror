@@ -6,7 +6,9 @@
     check-set-mode!
     check-reset!
     check-passed?)
-  (import (srfi |78|))
+  (import 
+    (only (rnrs base) quote) 
+    (srfi |78|))
   
   (srfi-78:error-who '(library (srfi lightweight-testing)))
 )

@@ -7,7 +7,9 @@
     :port :dispatched :do :let :parallel :while :until
     :-dispatch-ref :-dispatch-set! make-initial-:-dispatch 
     dispatch-union :generator-proc)
-  (import (srfi |42|))
+  (import 
+    (only (rnrs base) quote) 
+    (srfi |42|))
   
   (srfi-42:error-who '(library (srfi eager-comprehensions)))
 )

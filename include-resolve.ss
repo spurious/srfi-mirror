@@ -1,7 +1,9 @@
 (library (srfi include-resolve)
-  (export include/resolve)
-  (import (ikarus))
-  
+  (export 
+    include/resolve)
+  (import 
+    (rnrs) 
+    (only (ikarus) library-path format include-into))
   
   (define-syntax include/resolve
     (lambda (stx)
@@ -18,7 +20,7 @@
                (syntax-error stx (format "can't find file ~a in library-path" (string-append lp*/sep fp)))
                (let ([full (string-append (car search) sep lp*/sep fp)])
                  (if (file-exists? full)
-                   #`(include #,(datum->syntax #'kw full))
+                   (with-syntax ([full-stx (datum->syntax #'kw full)])
+                     #'(include-into kw full-stx))
                    (loop (cdr search)))))))])))
-  
 )
