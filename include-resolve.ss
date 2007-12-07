@@ -17,6 +17,7 @@
                 [fp (syntax->datum #'file-path)])
            (let loop ([search (library-path)])
              (if (null? search)
+               ;(syntax-violation #f (format "can't find file ~a in library-path" (string-append lp*/sep fp)) stx)
                (syntax-error stx (format "can't find file ~a in library-path" (string-append lp*/sep fp)))
                (let ([full (string-append (car search) sep lp*/sep fp)])
                  (if (file-exists? full)

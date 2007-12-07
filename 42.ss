@@ -16,11 +16,11 @@
   
   
   (define srfi-42:error-who
-    (make-parameter '(library (srfi |42|))))
+    (make-parameter '(library (srfi 42))))
   
   ;;; srfi-23 style
   (define (error . args)
     (apply rnrs:error (srfi-42:error-who) args))
   
-  (include/resolve ("srfi" "42") "ec.scm")
+  (include/resolve ("srfi" "42") "ec.scm")  
 )

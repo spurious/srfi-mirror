@@ -4,6 +4,7 @@
 ;
 ; sebastian.egner@philips.com, Eindhoven, The Netherlands, 25-Apr-2005
 ; Scheme R5RS (incl. macros), SRFI-23 (error).
+;;; Modified by Derick Eddington to be able to be included into an R6RS library.
 ; 
 ; Loading the implementation into Scheme48 0.57:
 ;   ,open srfi-23
@@ -778,23 +779,22 @@
           (else
            #f )))))))
 
-(define :-dispatch
-  (make-initial-:-dispatch) )
+(define :-dispatch 
+  (make-parameter (make-initial-:-dispatch)
+                  (lambda (x) (if (procedure? x) x (error "not a procedure" x)))))
 
 (define (:-dispatch-ref)
-  :-dispatch )
+  (:-dispatch))
 
 (define (:-dispatch-set! dispatch)
-  (if (not (procedure? dispatch))
-      (error "not a procedure" dispatch) )
-  (set! :-dispatch dispatch) )
+  (:-dispatch dispatch))
 
 (define-syntax :
   (syntax-rules (index)
     ((: cc var (index i) arg1 arg ...)
-     (:dispatched cc var (index i) :-dispatch arg1 arg ...) )
+     (:dispatched cc var (index i) (:-dispatch) arg1 arg ...) )
     ((: cc var arg1 arg ...)
-     (:dispatched cc var :-dispatch arg1 arg ...) )))
+     (:dispatched cc var (:-dispatch) arg1 arg ...) )))
 
 
 ; ==========================================================================

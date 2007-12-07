@@ -15,7 +15,7 @@
   
   
   (define srfi-78:error-who
-    (make-parameter '(library (srfi |78|))))
+    (make-parameter '(library (srfi 78))))
   
   ;;; srfi-23 style
   (define (error . args)
@@ -37,5 +37,5 @@
   
   (include/resolve ("srfi" "78") "check.scm")
   
-  (set! check:write pretty-print/no-trailing-newline)
+  (set! check:write pretty-print/no-trailing-newline)  
 )
