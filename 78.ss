@@ -5,21 +5,16 @@
     check-report
     check-set-mode!
     check-reset!
-    check-passed?
-    srfi-78:error-who)
+    check-passed?)
   (import 
     (rename (rnrs) (error rnrs:error))
-    (only (ikarus) make-parameter pretty-print with-output-to-string)
+    (only (ikarus) pretty-print with-output-to-string)
     (srfi include-resolve)
     (srfi |42|))
   
-  
-  (define srfi-78:error-who
-    (make-parameter '(library (srfi 78))))
-  
   ;;; srfi-23 style
   (define (error . args)
-    (apply rnrs:error (srfi-78:error-who) args))
+    (apply rnrs:error '(library (srfi lightweight-testing/78)) args))
   
   ;;; check.scm says a pretty-print with a trailing newline 
   ;;; will make its print-outs look bad, so:

@@ -8,8 +8,5 @@
     :-dispatch-ref :-dispatch-set! make-initial-:-dispatch 
     dispatch-union :generator-proc)
   (import 
-    (only (rnrs base) quote) 
     (srfi |42|))
-  
-  (srfi-42:error-who '(library (srfi eager-comprehensions)))
 )

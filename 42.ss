@@ -6,21 +6,15 @@
     : :list :string :vector :integers :range :real-range :char-range 
     :port :dispatched :do :let :parallel :while :until
     :-dispatch-ref :-dispatch-set! make-initial-:-dispatch 
-    dispatch-union :generator-proc
-    srfi-42:error-who)
+    dispatch-union :generator-proc)
   (import
     (rnrs r5rs)
     (rename (rnrs) (error rnrs:error))
-    (only (ikarus) make-parameter)
     (srfi include-resolve))
-  
-  
-  (define srfi-42:error-who
-    (make-parameter '(library (srfi 42))))
   
   ;;; srfi-23 style
   (define (error . args)
-    (apply rnrs:error (srfi-42:error-who) args))
+    (apply rnrs:error '(library (srfi eager-comprehensions/42)) args))
   
   (include/resolve ("srfi" "42") "ec.scm")  
 )
