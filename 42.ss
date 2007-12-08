@@ -8,13 +8,16 @@
     :-dispatch-ref :-dispatch-set! make-initial-:-dispatch 
     dispatch-union :generator-proc)
   (import
+    (except (rnrs) error)
     (rnrs r5rs)
-    (rename (rnrs) (error rnrs:error))
+    (only (ikarus) make-parameter parameterize)
+    (prefix (srfi |23|) |23:|)
     (srfi include-resolve))
   
-  ;;; srfi-23 style
   (define (error . args)
-    (apply rnrs:error '(library (srfi eager-comprehensions/42)) args))
+    (parameterize ([|23:error-who| 
+                    '(library (srfi eager-comprehensions/42))])
+      (apply |23:error| args)))
   
   (include/resolve ("srfi" "42") "ec.scm")  
 )

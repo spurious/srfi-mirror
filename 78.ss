@@ -5,16 +5,26 @@
     check-report
     check-set-mode!
     check-reset!
-    check-passed?)
+    check-passed?
+    ;;; All of (srfi |42|):
+    do-ec list-ec append-ec string-ec string-append-ec vector-ec 
+    vector-of-length-ec sum-ec product-ec min-ec max-ec any?-ec 
+    every?-ec first-ec last-ec fold-ec fold3-ec 
+    : :list :string :vector :integers :range :real-range :char-range 
+    :port :dispatched :do :let :parallel :while :until
+    :-dispatch-ref :-dispatch-set! make-initial-:-dispatch 
+    dispatch-union :generator-proc)
   (import 
-    (rename (rnrs) (error rnrs:error))
-    (only (ikarus) pretty-print with-output-to-string)
+    (except (rnrs) error)
+    (only (ikarus) pretty-print with-output-to-string make-parameter parameterize)
     (srfi include-resolve)
+    (prefix (srfi |23|) |23:|)
     (srfi |42|))
   
-  ;;; srfi-23 style
   (define (error . args)
-    (apply rnrs:error '(library (srfi lightweight-testing/78)) args))
+    (parameterize ([|23:error-who| 
+                    '(library (srfi lightweight-testing/78))])
+      (apply |23:error| args)))
   
   ;;; check.scm says a pretty-print with a trailing newline 
   ;;; will make its print-outs look bad, so:
