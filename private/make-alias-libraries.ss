@@ -1,7 +1,7 @@
 #! /usr/bin/env scheme-script
 (import 
   (ikarus) 
-  (srfi registry)
+  (srfi private registry)
   (srfi eager-comprehensions)
   (match))
 

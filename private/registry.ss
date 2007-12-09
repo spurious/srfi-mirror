@@ -1,4 +1,4 @@
-(library (srfi registry)
+(library (srfi private registry)
   (export 
     aliases
     available-features)

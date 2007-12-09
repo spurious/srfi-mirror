@@ -1,6 +1,6 @@
 (library (srfi feature-expand)
   (export cond-expand)
-  (import (rnrs) (srfi registry))
+  (import (rnrs) (srfi private registry))
   
   (define-syntax cond-expand
     (lambda (stx)

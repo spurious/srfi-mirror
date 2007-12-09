@@ -1,4 +1,4 @@
-(library (srfi include-resolve)
+(library (srfi private include-resolve)
   (export 
     include/resolve)
   (import 

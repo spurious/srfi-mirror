@@ -17,7 +17,7 @@
   (import 
     (except (rnrs) error)
     (only (ikarus) pretty-print with-output-to-string make-parameter parameterize)
-    (srfi include-resolve)
+    (srfi private include-resolve)
     (prefix (srfi error-reporting) ER:)
     (srfi eager-comprehensions))
   

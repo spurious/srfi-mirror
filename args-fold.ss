@@ -10,7 +10,7 @@
   (import 
     (except (rnrs) let-values let*-values)
     (srfi let-values)
-    (srfi include-resolve))
+    (srfi private include-resolve))
   
   
   (define-record-type option
@@ -31,7 +31,7 @@
                 (not (and ra oa))
                 (procedure? p))
             (c n ra oa p)
-            (assertion-violation 'option "invalid arguments" c n ra oa p))))))
+            (assertion-violation 'option "invalid arguments" n ra oa p))))))
 
   (define args-fold
     (let ([option make-option])

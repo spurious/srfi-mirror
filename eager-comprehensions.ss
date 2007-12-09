@@ -12,7 +12,7 @@
     (rnrs r5rs)
     (only (ikarus) make-parameter parameterize)
     (prefix (srfi error-reporting) ER:)
-    (srfi include-resolve))
+    (srfi private include-resolve))
   
   (define (error . args)
     (parameterize ([ER:error-who 
