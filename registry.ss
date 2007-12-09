@@ -10,6 +10,7 @@
     ;   primary                     library aliases        feature aliases
     '([(srfi feature-expand)         [(srfi |0|)]           [srfi-0]]
       [(srfi error-reporting)        [(srfi |23|)]          [srfi-23]]
+      [(srfi specialize-procedures)  [(srfi |26|)]          [srfi-26]]
       [(srfi eager-comprehensions)   [(srfi |42|)]          [srfi-42]]
       [(srfi lightweight-testing)    [(srfi |78|)]          [srfi-78]]))
   
