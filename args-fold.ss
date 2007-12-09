@@ -8,8 +8,7 @@
     option-optional-arg?
     option-processor)
   (import 
-    (except (rnrs) let-values let*-values)
-    (srfi let-values)
+    (rnrs)
     (srfi private include-resolve))
   
   
