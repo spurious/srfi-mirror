@@ -8,12 +8,20 @@
 (define (problem msg . args)
   (apply error 'make-alias-libraries msg args))
 
-
 (for-each ; output to file <alias>.ss:
  (match-lambda
    [((primary-name . primary-filename) output-aliases ...)
-    (let* ([get-exports (lambda (lib-form) (cdr (caddr lib-form)))]
-           [exports (get-exports (with-input-from-file primary-filename read))])
+    (let* ([get-exports 
+            (match-lambda [('library name ('export . export-specs) . rest) 
+                           (letrec ([get-renames
+                                     (match-lambda [(('rename (from to)) . rest)
+                                                    (cons to (get-renames rest))]
+                                                   [(non-rename . rest)
+                                                    (cons non-rename (get-renames rest))]
+                                                   [() '()])])
+                             (get-renames export-specs))])]
+           [exports 
+            (get-exports (with-input-from-file primary-filename read))])
       (for-each (lambda (oa)
                   (with-output-to-file (string-append (symbol->string oa) ".ss")
                     (lambda ()
