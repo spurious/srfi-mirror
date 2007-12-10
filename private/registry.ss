@@ -10,7 +10,7 @@
     ;   primary                     library aliases        feature aliases
     '([(srfi feature-expand)         [(srfi  |0|)]          [srfi-0]]
       [(srfi let-values)             [(srfi |11|)]          [srfi-11]]
-      ;[(srfi time)                   [(srfi |19|)]          [srfi-19]]
+      [(srfi time)                   [(srfi |19|)]          [srfi-19]]
       [(srfi error-reporting)        [(srfi |23|)]          [srfi-23]]
       [(srfi specialize-procedures)  [(srfi |26|)]          [srfi-26]]
       [(srfi args-fold)              [(srfi |37|)]          [srfi-37]]

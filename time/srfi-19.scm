@@ -150,22 +150,26 @@
 ;;; A Very simple Error system for the time procedures
 ;;; 
 (define tm:time-error-types
-  '(invalid-clock-type
-    unsupported-clock-type
-    incompatible-time-types
-    not-duration
-    dates-are-immutable
-    bad-date-format-string
-    bad-date-template-string
-    invalid-month-specification
+  '((invalid-clock-type . "invalid clock type")
+    (unsupported-clock-type . "unsupported clock type")
+    (incompatible-time-types . "incompatible time types")
+    (not-duration . "not duration")
+    (dates-are-immutable . "dates are immutable")
+    (bad-date-format-string . "bad date format string")
+    (bad-date-template-string . "bad date template string")
+    (invalid-month-specification . "invalid month specification")
     ))
 
 (define (tm:time-error caller type value)
-  (if (member type tm:time-error-types)
-      (if value
-	  (error caller (format "time-error type ~s: ~s" type value))
-	  (error caller (format "time-error type ~s" type)))
-      (error caller (format "time-error unsupported error type ~s" type))))
+  (cond 
+    [(assoc type tm:time-error-types)
+     =>
+     (lambda (p)
+       (if value
+         (error caller (cdr p) value)
+         (error caller (cdr p))))]
+    [else
+     (error caller "(library (srfi time)) internal error: unsupported error type" type)]))
 
 
 ;; A table of leap seconds
@@ -262,7 +266,7 @@
 
 (define (copy-time time)
   (make-time (time-type time)
-	     (time-nanosecond time)
+	     (time-nanosecond time)  ; original had this mistakenly swapped with time-second
 	     (time-second time)))
 
 
@@ -270,6 +274,8 @@
 
 ;;; specific time getters.
 ;; Ikarus's (current-time) uses POSIX gettimeofday()
+;; I'm not sure why the original was using time-nanoseconds
+;; as 10000 * the milliseconds
 ;; 
 
 (define (tm:get-time-of-day)
@@ -331,6 +337,8 @@
 ;; -- time resolution
 ;; this is the resolution of the clock in nanoseconds.
 ;; this will be implementation specific.
+;; Ikarus uses gettimeofday() which gives microseconds,
+;; so our resolution is 1000 nanoseconds
 
 (define (time-resolution . clock-type)
   (let ((clock-type (:optional clock-type time-utc)))
@@ -383,7 +391,7 @@
 ;; -- time arithmetic
 
 (define (tm:time->nanoseconds time)
-  #|(define (sign1 n)
+  #|(define (sign1 n)   ; must be code rot
     (if (negative? n) -1 1))|#
   (+ (* (time-second time) tm:nano)
      (time-nanosecond time)))
@@ -636,13 +644,8 @@
     ))
 
 
-;; relies on the fact that we named our time zone accessor
-;; differently from MzScheme's....
-;; This should be written to be OS specific.
-
 (define (tm:local-tz-offset)
-  #|(date-time-zone-offset (seconds->date (current-seconds)))|#
-  (error 'tm:local-tz-offset "Can't be implemented yet. Ask Aziz to create TZ offset getter."))
+  (ikarus:time-gmt-offset (ikarus:current-time)))
 
 ;; special thing -- ignores nanos
 (define (tm:time->julian-day-number seconds tz-offset)

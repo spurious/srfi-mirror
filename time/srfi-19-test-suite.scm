@@ -1,5 +1,9 @@
+#! /usr/bin/env scheme-script
 ;;; simple test procedures
-
+(import 
+  (except (ikarus) current-time time time? time-nanosecond time-second)
+  (rnrs mutable-pairs)
+  (srfi |19|))
 
 (define s19-tests (list))
 
@@ -47,16 +51,16 @@
     (not (null? (list (current-time 'time-tai)
 		      (current-time 'time-utc)
 		      (current-time 'time-monotonic)
-		      (current-time 'time-thread)
-		      (current-time 'time-process))))))
+		      #|(current-time 'time-thread)
+		      (current-time 'time-process)|#)))))
 
 (define-s19-test! "Testing time resolutions"
   (lambda ()
     (not (null? (list (time-resolution 'time-tai)
 		      (time-resolution 'time-utc)
 		      (time-resolution 'time-monotonic)
-		      (time-resolution 'time-thread)
-		      (time-resolution 'time-process))))))
+		      #|(time-resolution 'time-thread)
+		      (time-resolution 'time-process)|#)))))
 
 (define-s19-test! "Time comparisons (time=?, etc.)"
   (lambda ()
@@ -208,3 +212,26 @@
 (begin (newline) (run-s19-tests #t))
 
 
+(define (date->string/all-formats)
+  ; TODO: figure out why ~f isn't working
+  ; TODO: figure out why ~x and ~X aren't doing what the srfi-19 doc says they do
+  (import (only (ikarus) printf))
+  (define fs
+    '("~~" "~a" "~A" "~b" "~B" "~c" "~d" "~D" "~e" #;"~f" "~h" "~H"
+      "~I" "~j" "~k" "~l" "~m" "~M" "~n" "~N" "~p" "~r" "~s"
+      "~S" "~t" "~T" "~U" "~V" "~w" "~W" "~x" "~X" "~y" "~Y"
+      "~z" "~Z" "~1" "~2" "~3" "~4" "~5"))
+  (define cd (current-date))
+  (display "\n;;; Running date->string format exercise\n")
+  (printf "(current-date)\n => ~s\n" cd)
+  (for-each
+   (lambda (f)
+     (printf "\n--- Format: ~a ----------------------------------------\n" f) 
+     (display (date->string cd f)) (newline))
+   fs))
+
+#;(define (string->date/all-formats)
+  )
+
+(date->string/all-formats)
+#;(string->date/all-formats)
