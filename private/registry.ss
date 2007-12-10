@@ -9,6 +9,7 @@
     ;
     ;   primary                     library aliases        feature aliases
     '([(srfi feature-expand)         [(srfi  |0|)]          [srfi-0]]
+      [(srfi string-ports)           [(srfi  |6|)]          [srfi-6]]
       [(srfi let-values)             [(srfi |11|)]          [srfi-11]]
       [(srfi time)                   [(srfi |19|)]          [srfi-19]]
       [(srfi error-reporting)        [(srfi |23|)]          [srfi-23]]

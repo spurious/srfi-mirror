@@ -33,8 +33,9 @@
     (rnrs)
     (rnrs r5rs)
     (rnrs mutable-strings)
-    (only (ikarus) format open-input-string open-output-string get-output-string)
+    (only (ikarus) format)
     (prefix (only (ikarus) current-time time-nanosecond time-second time-gmt-offset) ikarus:)
+    (srfi string-ports)
     (srfi private include-resolve))
   
   (define (read-line)
