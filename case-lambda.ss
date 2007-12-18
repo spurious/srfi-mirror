@@ -2,5 +2,5 @@
   (export 
     case-lambda)
   (import 
-    (only (rnrs base) case-lambda))
+    (only (rnrs control) case-lambda))
 )
