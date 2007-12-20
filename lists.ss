@@ -57,8 +57,7 @@
   (import 
     (except (rnrs) map member assoc)
     (rnrs mutable-pairs)
-    (only (ikarus) last-pair make-list)
-    (srfi private let-opt))
+    (only (ikarus) last-pair make-list))
 
 ;;; 
 ;;; In principle, the following R4RS list- and pair-processing procedures
@@ -846,14 +845,18 @@
 ;;; fold/unfold
 ;;;;;;;;;;;;;;;
 
-(define (unfold-right p f g seed . maybe-tail)
-  (check-arg procedure? p unfold-right)
-  (check-arg procedure? f unfold-right)
-  (check-arg procedure? g unfold-right)
-  (let lp ((seed seed) (ans (:optional maybe-tail '())))
-    (if (p seed) ans
-	(lp (g seed)
-	    (cons (f seed) ans)))))
+(define unfold-right
+  (case-lambda
+    [(p f g seed)
+     (unfold-right p f g seed '())]
+    [(p f g seed tail)
+     (check-arg procedure? p unfold-right)
+     (check-arg procedure? f unfold-right)
+     (check-arg procedure? g unfold-right)
+     (let lp ((seed seed) (ans tail))
+       (if (p seed) ans
+         (lp (g seed)
+             (cons (f seed) ans))))]))
 
 
 (define (unfold p f g seed . maybe-tail-gen)
@@ -1251,18 +1254,27 @@
 ;;; assoc key lis [=]		Search alist by key comparison
 ;;; alist-delete key alist [=]	Alist-delete by key comparison
 
-(define (delete x lis . maybe-=) 
-  (let ((= (:optional maybe-= equal?)))
-    (filter (lambda (y) (not (= x y))) lis)))
+(define delete 
+  (case-lambda
+    [(x lis)
+     (delete x lis equal?)]
+    [(x lis =) 
+     (filter (lambda (y) (not (= x y))) lis)]))
 
-(define (delete! x lis . maybe-=)
-  (let ((= (:optional maybe-= equal?)))
-    (filter! (lambda (y) (not (= x y))) lis)))
+(define delete! 
+  (case-lambda
+    [(x lis)
+     (delete! x lis equal?)]
+    [(x lis =)
+     (filter! (lambda (y) (not (= x y))) lis)]))
 
 ;;; Extended from R4RS to take an optional comparison argument.
-(define (member x lis . maybe-=)
-  (let ((= (:optional maybe-= equal?)))
-    (find-tail (lambda (y) (= x y)) lis)))
+(define member  
+  (case-lambda
+    [(x lis)
+     (member x lis equal?)]
+    [(x lis =)
+     (find-tail (lambda (y) (= x y)) lis)]))
 
 ;;; R4RS, hence we don't bother to define.
 ;;; The MEMBER and then FIND-TAIL call should definitely
@@ -1280,34 +1292,43 @@
 ;;; linear-time algorithm to kill the dups. Or use an algorithm based on
 ;;; element-marking. The former gives you O(n lg n), the latter is linear.
 
-(define (delete-duplicates lis . maybe-=)
-  (let ((elt= (:optional maybe-= equal?)))
-    (check-arg procedure? elt= delete-duplicates)
-    (let recur ((lis lis))
-      (if (null-list? lis) lis
-	  (let* ((x (car lis))
-		 (tail (cdr lis))
-		 (new-tail (recur (delete x tail elt=))))
-	    (if (eq? tail new-tail) lis (cons x new-tail)))))))
+(define delete-duplicates 
+  (case-lambda
+    [(lis)
+     (delete-duplicates equal?)]
+    [(lis elt=)
+     (check-arg procedure? elt= delete-duplicates)
+     (let recur ((lis lis))
+       (if (null-list? lis) lis
+         (let* ((x (car lis))
+                (tail (cdr lis))
+                (new-tail (recur (delete x tail elt=))))
+           (if (eq? tail new-tail) lis (cons x new-tail)))))]))
 
-(define (delete-duplicates! lis maybe-=)
-  (let ((elt= (:optional maybe-= equal?)))
-    (check-arg procedure? elt= delete-duplicates!)
-    (let recur ((lis lis))
-      (if (null-list? lis) lis
-	  (let* ((x (car lis))
-		 (tail (cdr lis))
-		 (new-tail (recur (delete! x tail elt=))))
-	    (if (eq? tail new-tail) lis (cons x new-tail)))))))
+(define delete-duplicates! 
+  (case-lambda
+    [(lis)
+     (delete-duplicates! lis equal?)]
+    [(lis elt=)
+     (check-arg procedure? elt= delete-duplicates!)
+     (let recur ((lis lis))
+       (if (null-list? lis) lis
+         (let* ((x (car lis))
+                (tail (cdr lis))
+                (new-tail (recur (delete! x tail elt=))))
+           (if (eq? tail new-tail) lis (cons x new-tail)))))]))
 
 
 ;;; alist stuff
 ;;;;;;;;;;;;;;;
 
 ;;; Extended from R4RS to take an optional comparison argument.
-(define (assoc x lis . maybe-=)
-  (let ((= (:optional maybe-= equal?)))
-    (find (lambda (entry) (= x (car entry))) lis)))
+(define assoc 
+  (case-lambda
+    [(x lis)
+     (assoc x lis equal?)]
+    [(x lis =)
+     (find (lambda (entry) (= x (car entry))) lis)]))
 
 (define (alist-cons key datum alist) (cons (cons key datum) alist))
 
@@ -1315,13 +1336,19 @@
   (map (lambda (elt) (cons (car elt) (cdr elt)))
        alist))
 
-(define (alist-delete key alist . maybe-=)
-  (let ((= (:optional maybe-= equal?)))
-    (filter (lambda (elt) (not (= key (car elt)))) alist)))
+(define alist-delete 
+  (case-lambda
+    [(key alist)
+     (alist-delete key alist equal?)]
+    [(key alist =)
+     (filter (lambda (elt) (not (= key (car elt)))) alist)]))
 
-(define (alist-delete! key alist . maybe-=)
-  (let ((= (:optional maybe-= equal?)))
-    (filter! (lambda (elt) (not (= key (car elt)))) alist)))
+(define alist-delete! 
+  (case-lambda
+    [(key alist)
+     (alist-delete! key alist equal?)]
+    [(key alist =)
+     (filter! (lambda (elt) (not (= key (car elt)))) alist)]))
 
 
 ;;; find find-tail take-while drop-while span break any every list-index
