@@ -2,7 +2,7 @@
   (export error error-who)
   (import 
     (rename (rnrs base) (error rnrs:error))
-    (only (ikarus) make-parameter))
+    (srfi parameters))
   
   (define error-who (make-parameter #f))
   

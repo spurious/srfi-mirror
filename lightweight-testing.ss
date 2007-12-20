@@ -16,7 +16,8 @@
     dispatch-union :generator-proc)
   (import 
     (except (rnrs) error)
-    (only (ikarus) pretty-print with-output-to-string make-parameter parameterize)
+    (only (ikarus) pretty-print with-output-to-string)
+    (srfi parameters)
     (srfi private include-resolve)
     (prefix (srfi error-reporting) ER:)
     (srfi eager-comprehensions))

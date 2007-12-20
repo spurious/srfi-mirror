@@ -10,7 +10,7 @@
   (import
     (except (rnrs) error)
     (rnrs r5rs)
-    (only (ikarus) make-parameter parameterize)
+    (srfi parameters)
     (prefix (srfi error-reporting) ER:)
     (srfi private include-resolve))
   
