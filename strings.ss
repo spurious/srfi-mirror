@@ -61,7 +61,8 @@
   (define-syntax check-arg
     (syntax-rules ()
       [(_ pred val caller)
-       (unless (pred val)
+       (if (pred val)
+         val
          (error 'caller "check-arg failed" val))]))
   
   (define (char-cased? c)
