@@ -22,6 +22,7 @@
       [(srfi specialize-procedures)  [(srfi |26|)]          [srfi-26]]
       [(srfi args-fold)              [(srfi |37|)]          [srfi-37]]
       [(srfi parameters)             [(srfi |39|)]          [srfi-39]]
+      [(srfi streams)                [(srfi |41|)]          [srfi-41]]
       [(srfi eager-comprehensions)   [(srfi |42|)]          [srfi-42]]
       [(srfi lightweight-testing)    [(srfi |78|)]          [srfi-78]]))
   
