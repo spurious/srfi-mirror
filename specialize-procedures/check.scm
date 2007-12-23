@@ -1,3 +1,4 @@
+#! /usr/bin/env scheme-script
 ; CONFIDENCE TEST FOR IMPLEMENTATION OF SRFI-26
 ; =============================================
 ;
@@ -18,10 +19,17 @@
 ; (check expr)
 ;    evals expr and issues an error if it is not #t.
 
+(import
+  (except (rnrs) error)
+  (rnrs eval)
+  (srfi error-reporting)
+  (srfi parameters))
+
 (define (check expr)
   (if (not (eq? (eval expr (environment '(rnrs) '(srfi specialize-procedures)))
                 #t))
-      (error 'check "check failed" expr)))
+      (parameterize ([error-who 'check])
+        (error "check failed" expr))))
 
 ; (check-all)
 ;    runs several tests on cut and reports.
