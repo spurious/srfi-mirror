@@ -1,3 +1,4 @@
+#! /usr/bin/env scheme-script
 ; <PLAINTEXT>
 ; Copyright (c) 2005-2006 Sebastian Egner.
 ; 
@@ -40,6 +41,11 @@
 ; Scheme48: 
 ; ,open srfi-23 srfi-42
 ; ,load check.scm examples.scm
+
+(import 
+  (rnrs)
+  (rnrs r5rs)
+  (srfi lightweight-testing))
 
 ; -- simple test --
 

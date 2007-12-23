@@ -1,3 +1,4 @@
+#! /usr/bin/env scheme-script
 ; <PLAINTEXT>
 ; Examples for Eager Comprehensions in [outer..inner|expr]-Convention
 ; ===================================================================
@@ -27,6 +28,20 @@
 ;   (define my-call-with-input-file call-with-input-file)
 ;   (load "examples.scm")
 
+(import
+  (except (rnrs) error)
+  (rnrs mutable-strings)
+  (srfi eager-comprehensions)
+  (srfi error-reporting))
+
+(define (my-open-output-file filename)
+  (open-file-output-port filename 
+                         (file-options no-fail)
+                         'block
+                         (native-transcoder)))
+
+(define (my-call-with-input-file filename thunk)
+  (call-with-input-file filename thunk))
 
 ; Tools for checking results
 ; ==========================

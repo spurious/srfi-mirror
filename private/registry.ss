@@ -5,8 +5,8 @@
   (import (rnrs))
   
   (define aliases
+    #!ikarus  ;; because of |blah| extension to reader symbol syntax
     ; structured: ([primary [library-aliases ...] [feature-aliases ...]] ...)
-    ;
     ;   primary                     library aliases        feature aliases
     '([(srfi feature-expand)         [(srfi  |0|)]          [srfi-0]]
       [(srfi lists)                  [(srfi  |1|)]          [srfi-1]]
@@ -24,7 +24,8 @@
       [(srfi parameters)             [(srfi |39|)]          [srfi-39]]
       [(srfi streams)                [(srfi |41|)]          [srfi-41]]
       [(srfi eager-comprehensions)   [(srfi |42|)]          [srfi-42]]
-      [(srfi lightweight-testing)    [(srfi |78|)]          [srfi-78]]))
+      [(srfi lightweight-testing)    [(srfi |78|)]          [srfi-78]])
+    #!r6rs)
   
   (define implementation-features
     '(ikarus))

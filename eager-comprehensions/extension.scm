@@ -17,6 +17,8 @@
 ;   ; load "examples.scm" as described there
 ;   (load "extension.scm")
 
+; For Ikarus, run:
+;   $ ikarus examples.scm extensions.scm
 
 ; reset SRFI
 

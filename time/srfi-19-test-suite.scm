@@ -1,9 +1,9 @@
 #! /usr/bin/env scheme-script
 ;;; simple test procedures
-(import 
+(import
+  (srfi time)
   (except (ikarus) current-time time time? time-nanosecond time-second)
-  (rnrs mutable-pairs)
-  (srfi |19|))
+  (rnrs mutable-pairs))
 
 (define s19-tests (list))
 
