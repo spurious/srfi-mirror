@@ -12,9 +12,9 @@
           random-source-make-reals)
   
   (import (except (rnrs) error)
-          (except (ikarus) error)     ; for time-nanosecond and current-time
           (rnrs r5rs)                 ; for modulo
           (srfi parameters)
+          (srfi time)                 ; for time-nanosecond and current-time
           (prefix (srfi error-reporting) ER:)
           (srfi private include-resolve)
           )

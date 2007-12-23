@@ -5,6 +5,7 @@
 
 (import (rnrs) 
         (rnrs r5rs)
+        (only (ikarus) pretty-print)
         (srfi random)
         (srfi eager-comprehensions)
         (srfi compare))
@@ -95,7 +96,7 @@
 ; 1. Uncomment the following lines:
 ;
 
-(define pretty-write display)
+(define pretty-write pretty-print)
 
 ; 2. Run this file.
 

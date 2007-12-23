@@ -525,7 +525,7 @@
 (define random-real
   (random-source-make-reals default-random-source))
 
-;;; mrgk3a-a.ss
+;;; mrg32k3a-a.ss
 
 ; 54-BIT INTEGER IMPLEMENTATION OF THE "MRG32K3A"-GENERATOR
 ; =========================================================

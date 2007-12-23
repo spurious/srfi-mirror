@@ -20,10 +20,12 @@
       [(srfi time)                   [(srfi |19|)]          [srfi-19]]
       [(srfi error-reporting)        [(srfi |23|)]          [srfi-23]]
       [(srfi specialize-procedures)  [(srfi |26|)]          [srfi-26]]
+      [(srfi random)                 [(srfi |27|)]          [srfi-27]]
       [(srfi args-fold)              [(srfi |37|)]          [srfi-37]]
       [(srfi parameters)             [(srfi |39|)]          [srfi-39]]
       [(srfi streams)                [(srfi |41|)]          [srfi-41]]
       [(srfi eager-comprehensions)   [(srfi |42|)]          [srfi-42]]
+      [(srfi compare)                [(srfi |67|)]          [srfi-67]]
       [(srfi lightweight-testing)    [(srfi |78|)]          [srfi-78]])
     #!r6rs)
   

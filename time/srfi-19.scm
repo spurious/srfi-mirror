@@ -1,6 +1,7 @@
 ;; SRFI-19: Time Data Types and Procedures.
 ;;
 ;; Modified by Derick Eddington to be included into the (srfi time) Ikarus library.
+;; TODO: Once Ikarus has threads, the thread timing stuff can probably be made to work.
 ;; 
 ;; Copyright (C) I/NET, Inc. (2000, 2002, 2003). All Rights Reserved. 
 ;; 
