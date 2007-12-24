@@ -1,5 +1,3 @@
-; TODO: Fix definition of (:random-source-current-time).
-
 ;; R6RS port of the Scheme48 reference implementation of SRFI-27 
 
 ; MODULE DEFINITION FOR SRFI-27
