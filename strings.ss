@@ -47,23 +47,33 @@
     substring-spec-ok?)
     )
   (import
-    (except (rnrs base) string-copy string-for-each string->list)
+    (except (rnrs base) error string-copy string-for-each string->list)
     (except (rnrs mutable-strings) string-fill!)
     (except (rnrs unicode) string-upcase string-downcase string-titlecase)
     (rnrs arithmetic bitwise)
     (rnrs control)
     (rnrs r5rs)
+    (rnrs syntax-case)
+    (prefix (srfi error-reporting) ER:)
     (srfi receive)
     (srfi char-set)
+    (srfi parameters)
     (srfi private let-opt)
     (srfi private include-resolve))
   
+  (define (error . args)
+    (parameterize ([ER:error-who 
+                    '(library (srfi strings/13))])
+      (apply ER:error args)))
+  
   (define-syntax check-arg
-    (syntax-rules ()
-      [(_ pred val caller)
-       (if (pred val)
-         val
-         (error 'caller "check-arg failed" val))]))
+    (lambda (stx)
+      (syntax-case stx ()
+        [(_ pred val caller)
+         (and (identifier? #'val) (identifier? #'caller))
+         #'(unless (pred val)
+             (parameterize ([ER:error-who 'caller])
+               (ER:error "check-arg failed" val)))])))
   
   (define (char-cased? c)
     (char-upper-case? (char-upcase c)))

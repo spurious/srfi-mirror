@@ -169,11 +169,12 @@
 ;;;      (let lp ((val val))
 ;;;        (if (pred val) val (lp (error "Bad argument" val pred caller)))))
   (define-syntax check-arg
-    (syntax-rules ()
-      [(_ pred val caller)
-       (if (pred val)
-         val
-         (error 'caller "check-arg failed" val))]))
+    (lambda (stx)
+      (syntax-case stx ()
+        [(_ pred val caller)
+         (and (identifier? #'val) (identifier? #'caller))
+         #'(unless (pred val)
+             (error 'caller "check-arg failed" val))])))
 
 ;;;   A few uses of the LET-OPTIONAL and :OPTIONAL macros for parsing
 ;;;     optional arguments.

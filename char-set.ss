@@ -33,12 +33,15 @@
     char-set:empty       char-set:full
     )
   (import
-    (rnrs base)
+    (except (rnrs base) error)
     (rnrs mutable-strings)
     (rnrs r5rs)
     (rnrs arithmetic bitwise)
     (rnrs control)
+    (rnrs syntax-case)
+    (prefix (srfi error-reporting) ER:)
     (srfi records)
+    (srfi parameters)
     (srfi private let-opt)
     (srfi private include-resolve))
   
@@ -48,11 +51,19 @@
   (define (%char->latin1 c)
     (char->integer c))
   
+  (define (error . args)
+    (parameterize ([ER:error-who 
+                    '(library (srfi char-set/14))])
+      (apply ER:error args)))
+    
   (define-syntax check-arg
-    (syntax-rules ()
-      [(_ pred val caller)
-       (unless (pred val)
-         (error 'caller "check-arg failed" val))]))
+    (lambda (stx)
+      (syntax-case stx ()
+        [(_ pred val caller)
+         (identifier? #'val)
+         #'(unless (pred val)
+             (parameterize ([ER:error-who caller])
+               (ER:error "check-arg failed" val)))])))
   
   (include/resolve ("srfi" "char-set") "srfi-14.scm")
 )
