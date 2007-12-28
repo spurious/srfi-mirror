@@ -1,6 +1,6 @@
 ;; SRFI-19: Time Data Types and Procedures.
 ;;
-;; Modified by Derick Eddington to be included into the (srfi time) Ikarus library.
+;; Modified by Derick Eddington to be included into the (srfi time) R6RS library.
 ;; TODO: Once Ikarus has threads, the thread timing stuff can probably be made to work.
 ;; 
 ;; Copyright (C) I/NET, Inc. (2000, 2002, 2003). All Rights Reserved. 
@@ -280,9 +280,9 @@
 ;; 
 
 (define (tm:get-time-of-day)
-  (let ([ct (ikarus:current-time)])
-    (values (ikarus:time-second ct)
-            (ikarus:time-nanosecond ct))))
+  (let ([ct (host:current-time)])
+    (values (host:time-second ct)
+            (host:time-nanosecond ct))))
 
 (define (tm:current-time-utc)
   (receive (seconds nanos) (tm:get-time-of-day)
@@ -646,7 +646,7 @@
 
 
 (define (tm:local-tz-offset)
-  (ikarus:time-gmt-offset (ikarus:current-time)))
+  (host:time-gmt-offset (host:current-time)))
 
 ;; special thing -- ignores nanos
 (define (tm:time->julian-day-number seconds tz-offset)

@@ -1,14 +1,15 @@
 #! /usr/bin/env scheme-script
-(import 
-  (ikarus) 
+(import
+  (rnrs)
+  (srfi private make-alias-libraries-compat) 
   (srfi private registry)
   (srfi eager-comprehensions)
-  (match))
+  (match)) ;; the I.U. match that comes with Ikarus
 
 (define (problem msg . args)
   (apply error 'make-alias-libraries msg args))
 
-(for-each ; output to file <alias>.ss:
+(for-each ; output to file <alias>.sls:
  (lambda (x)
    (match x
      [((,primary-name . ,primary-filename) ,output-aliases ...)
@@ -23,7 +24,7 @@
                   [() '()])])])
         (for-each 
           (lambda (oa)
-            (define fn (string-append (symbol->string oa) ".ss"))
+            (define fn (string-append (symbol->string oa) ".sls"))
             (when (file-exists? fn) (delete-file fn))
             (with-output-to-file fn
               (lambda ()
@@ -40,5 +41,14 @@
    ;   ([primary [library-aliases ...] [feature-aliases ...]] ...)
    [([(srfi ,primary-name) [(srfi ,output-alias) ...] [,feature-aliases ...]] ...)
     (list-ec (:parallel (:list pn primary-name) (:list oal output-alias))
-             (cons (cons pn (string-append (symbol->string pn) ".ss")) oal))]
+             (cons (cons pn 
+                         (let* ([s (symbol->string pn)]
+                                [fn1 (string-append s ".sls")])
+                           (if (file-exists? fn1)
+                             fn1
+                             (let ([fn2 (string-append s impl-name-ext ".sls")])
+                               (if (file-exists? fn2)
+                                 fn2
+                                 (problem "can't find file for primary-name" pn)))))) 
+                   oal))]
    [,else (problem "can't understand registry's `aliases'" aliases)]))

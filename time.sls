@@ -33,8 +33,7 @@
     (rnrs)
     (rnrs r5rs)
     (rnrs mutable-strings)
-    (only (ikarus) format)
-    (prefix (only (ikarus) current-time time-nanosecond time-second time-gmt-offset) ikarus:)
+    (srfi time compat)
     (srfi string-ports)
     (srfi private include-resolve))
   

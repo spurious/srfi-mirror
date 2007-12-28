@@ -57,7 +57,7 @@
   (import 
     (except (rnrs) map member assoc)
     (rnrs mutable-pairs)
-    (only (ikarus) last-pair make-list))
+    (srfi lists compat))
 
 ;;; 
 ;;; In principle, the following R4RS list- and pair-processing procedures
