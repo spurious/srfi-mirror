@@ -27,15 +27,9 @@
             [()
              '()])))
       
-      ;;; First check these
       (syntax-case stx ()
         [(_ (clause* ...) body* ...)
          (unique-ids? (get-and-check-ids #'(clause* ...)))
-         'ignore])
-      
-      ;;; Then construct output syntax
-      (syntax-case stx ()
-        [(_ (clause* ...) body* ...)
          #'(and-let*-core #t (clause* ...) body* ...)])))
   
   (define-syntax and-let*-core
