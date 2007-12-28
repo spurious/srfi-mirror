@@ -16,6 +16,7 @@
       ;      primary                SRFI code number
       '([(srfi feature-expand)          0]
         [(srfi lists)                   1]
+        [(srfi and-let)                 2]
         [(srfi string-ports)            6]
         [(srfi receive)                 8]
         [(srfi records)                 9]

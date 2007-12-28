@@ -38,19 +38,15 @@
     (srfi string-ports)
     (srfi private include-resolve))
   
-  (define (read-line)
-    (let f ([ac '()])
-      (let ([x (read-char)])
-        (cond
-          [(eof-object? x)
-           (if (null? ac)
-             (eof-object)
-             (list->string (reverse ac)))]
-          [(char=? x #\newline)
-           (if (null? ac) (f '()) (list->string (reverse ac)))]
-          [else (f (cons x ac))]))))
+  (define read-line
+    (case-lambda
+      [()
+       (get-line (current-input-port))]
+      [(port)
+       (get-line port)]))
   
   (define eof (eof-object))
   
   (include/resolve ("srfi" "time") "srfi-19.scm")
 )
+
