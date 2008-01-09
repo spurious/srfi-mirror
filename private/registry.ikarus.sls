@@ -38,7 +38,7 @@
         [(srfi lightweight-testing)    78])))
   
   (define implementation-features
-    '(ikarus))
+    '(ikarus r6rs))
   
   (define additional-features
     '())
