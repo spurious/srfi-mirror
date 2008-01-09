@@ -1,35 +1,22 @@
 (library (srfi and-let)  
   ;; can't be named (srfi and-let*) because some OS's filenames can't have *
   (export and-let*)
-  (import (rnrs))
+  (import (rnrs) (srfi private unique-ids))
   
   (define-syntax and-let*
     (lambda (stx)
-      
-      (define (unique-ids? ls)
-        (or (null? ls)
-            (and (let notmem? ([x (car ls)] [ls (cdr ls)])
-                   (or (null? ls)
-                       (and (not (and (bound-identifier=? x (car ls))
-                                      (syntax-violation #f "duplicate binding" stx x)))
-                            (notmem? x (cdr ls)))))
-                 (unique-ids? (cdr ls)))))
-      
       (define (get-and-check-ids clauses)
-        (let loop ([c* clauses])
-          (syntax-case c* ()
-            [([var expr] . rest)
-             (or (identifier? #'var)
-                 (syntax-violation #f "not an identifier" stx #'var))
-             (cons #'var (loop #'rest))]
-            [(whatever . rest)
-             (loop #'rest)]
-            [()
-             '()])))
-      
+        (syntax-case clauses ()
+          [([var expr] . rest)
+           (or (identifier? #'var)
+               (syntax-violation #f "not an identifier" stx #'var))
+           (cons #'var (get-and-check-ids #'rest))]
+          [(whatever . rest)
+           (get-and-check-ids #'rest)]
+          [() '()]))
       (syntax-case stx ()
         [(_ (clause* ...) body* ...)
-         (unique-ids? (get-and-check-ids #'(clause* ...)))
+         (unique-ids?/raise (get-and-check-ids #'(clause* ...)) stx)
          #'(and-let*-core #t (clause* ...) body* ...)])))
   
   (define-syntax and-let*-core
