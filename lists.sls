@@ -768,7 +768,19 @@
 
 ;;; Return (map cdr lists). 
 ;;; However, if any element of LISTS is empty, just abort and return '().
+
+;(define (%cdrs lists)
+;  (let f ([ls lists] [ac '()])
+;    (cond
+;      [(pair? ls)
+;       (let ([a (car ls)])
+;         (if (null? a) 
+;             '()
+;             (f (cdr ls) (cons a ac))))]
+;      [else (reverse ac)])))
+
 (define (%cdrs lists)
+  (error '%cdrs "reached")
   (call-with-current-continuation
     (lambda (abort)
       (let recur ((lists lists))
@@ -778,29 +790,39 @@
 		  (cons (cdr lis) (recur (cdr lists)))))
 	    '())))))
 
-(define (%cars+ lists last-elt)	; (append! (map car lists) (list last-elt))
-  (let recur ((lists lists))
-    (if (pair? lists) (cons (caar lists) (recur (cdr lists))) (list last-elt))))
+;(define (%cars+ lists last-elt)	; (append! (map car lists) (list last-elt))
+;  (let recur ((lists lists))
+;    (if (pair? lists) (cons (caar lists) (recur (cdr lists))) (list last-elt))))
 
 ;;; LISTS is a (not very long) non-empty list of lists.
 ;;; Return two lists: the cars & the cdrs of the lists.
 ;;; However, if any of the lists is empty, just abort and return [() ()].
 
 (define (%cars+cdrs lists)
-  (call-with-current-continuation
-    (lambda (abort)
-      (let recur ((lists lists))
-        (if (pair? lists)
-	    (receive (list other-lists) (car+cdr lists)
-	      (if (null-list? list) (abort '() '()) ; LIST is empty -- bail out
-		  (receive (a d) (car+cdr list)
-		    (receive (cars cdrs) (recur other-lists)
-		      (values (cons a cars) (cons d cdrs))))))
-	    (values '() '()))))))
+  (let f ([ls lists] [a* '()] [d* '()])
+    (cond
+      [(pair? ls) 
+       (let ([a (car ls)])
+         (if (pair? a) 
+             (f (cdr ls) (cons (car a) a*) (cons (cdr a) d*))
+             (values '() '())))]
+      [else (values (reverse a*) (reverse d*))])))
+
+;  (call-with-current-continuation
+;    (lambda (abort)
+;      (let recur ((lists lists))
+;        (if (pair? lists)
+;	    (receive (list other-lists) (car+cdr lists)
+;	      (if (null-list? list) (abort '() '()) ; LIST is empty -- bail out
+;		  (receive (a d) (car+cdr list)
+;		    (receive (cars cdrs) (recur other-lists)
+;		      (values (cons a cars) (cons d cdrs))))))
+;	    (values '() '()))))))
 
 ;;; Like %CARS+CDRS, but we pass in a final elt tacked onto the end of the
 ;;; cars list. What a hack.
 (define (%cars+cdrs+ lists cars-final)
+  (error 'cars+cdrs+ "reached")
   (call-with-current-continuation
     (lambda (abort)
       (let recur ((lists lists))
@@ -1446,25 +1468,39 @@
 ;        (and (pred (car list))
 ;             (lp (cdr list))))))
 
-(define (every pred lis1 . lists)
-  (check-arg procedure? pred every)
-  (if (pair? lists)
-
-      ;; N-ary case
-      (receive (heads tails) (%cars+cdrs (cons lis1 lists))
-	(or (not (pair? heads))
-	    (let lp ((heads heads) (tails tails))
-	      (receive (next-heads next-tails) (%cars+cdrs tails)
-		(if (pair? next-heads)
-		    (and (apply pred heads) (lp next-heads next-tails))
-		    (apply pred heads)))))) ; Last PRED app is tail call.
+(define every
+  (case-lambda
+    [(p ls) 
+     (or (null-list? ls)
+         (let f ([p p] [a (car ls)] [d (cdr ls)])
+           (cond
+             [(pair? d) 
+              (and (p a) (f p (car d) (cdr d)))]
+             [else (p a)])))]
+    [(p ls1 ls2)
+     (cond
+       [(and (pair? ls1) (pair? ls2)) 
+        (let f ([p p] [a1 (car ls1)] [d1 (cdr ls1)] [a2 (car ls2)] [d2 (cdr ls2)])
+          (cond
+            [(and (pair? d1) (pair? d2)) 
+             (and (p a1 a2) (f p (car d1) (cdr d1) (car d2) (cdr d2)))]
+            [else (p a1 a2)]))]
+       [else #t])]
+    [(pred lis1 . lists)
+     (receive (heads tails) (%cars+cdrs (cons lis1 lists))
+       (or (not (pair? heads))
+           (let lp ((heads heads) (tails tails))
+             (receive (next-heads next-tails) (%cars+cdrs tails)
+       	(if (pair? next-heads)
+       	    (and (apply pred heads) (lp next-heads next-tails))
+       	    (apply pred heads))))))]))
 
       ;; Fast path
-      (or (null-list? lis1)
-	  (let lp ((head (car lis1))  (tail (cdr lis1)))
-	    (if (null-list? tail)
-		(pred head)	; Last PRED app is tail call.
-		(and (pred head) (lp (car tail) (cdr tail))))))))
+;;;       (or (null-list? lis1)
+;;; 	  (let lp ((head (car lis1))  (tail (cdr lis1)))
+;;; 	    (if (null-list? tail)
+;;; 		(pred head)	; Last PRED app is tail call.
+;;; 		(and (pred head) (lp (car tail) (cdr tail))))))))
 
 (define (list-index pred lis1 . lists)
   (check-arg procedure? pred list-index)
