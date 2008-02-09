@@ -30,10 +30,12 @@
         [(srfi random)                 27]
         [(srfi rec)                    31]
         [(srfi args-fold)              37]
+        [(srfi sharing)                38]
         [(srfi parameters)             39]
         [(srfi streams)                41]
         [(srfi eager-comprehensions)   42]
         [(srfi vectors)                43]
+        [(srfi format)                 48]
         [(srfi compare)                67]
         [(srfi lightweight-testing)    78])))
   
