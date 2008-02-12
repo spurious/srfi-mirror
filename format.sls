@@ -38,9 +38,8 @@
 (library (srfi format)
   (export 
     format)
-  (import 
-    (except (rnrs) define lambda)
-    (define traced)
+  (import
+    (rnrs)
     (srfi format compat)
     (srfi string-ports)
     (srfi sharing))
@@ -121,7 +120,9 @@
                  #\space)
                 ]
                [digits
-                (let* ( [num-str   (number->string (exact real))]
+                (let* ( [num-str   (number->string (if (rational? real)
+                                                     (+ 0.0 real)
+                                                     real))]
                         [dot-index (string-index  num-str #\.)]
                         [exp-index (string-index  num-str #\e)]
                         [length    (string-length num-str)]
@@ -370,7 +371,7 @@ OPTION  [MNEMONIC]      DESCRIPTION     -- Implementation Assumes ASCII Text Enc
                              (problem "~? requires a string" (car arglist))
                              )
                             (else
-                             (format-help (car arglist) (cadr arglist))
+                             (format-help p (car arglist) (cadr arglist))
                              (anychar-dispatch (+ pos 1) (cddr arglist) #f)
                              )))
                          ((#\H)      ; Help
