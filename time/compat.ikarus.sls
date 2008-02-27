@@ -1,4 +1,4 @@
-(library (srfi time compat)
+(library (xitomatl srfi time compat)
   (export
     format
     host:current-time 

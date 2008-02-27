@@ -1,4 +1,4 @@
-(library (srfi char-set)
+(library (xitomatl srfi char-set)
   (export
     ; Predicates & comparison
     char-set? char-set= char-set<= char-set-hash
@@ -39,11 +39,11 @@
     (rnrs arithmetic bitwise)
     (rnrs control)
     (rnrs syntax-case)
-    (prefix (srfi error-reporting) ER:)
-    (srfi records)
-    (srfi parameters)
-    (srfi private let-opt)
-    (srfi private include-resolve))
+    (prefix (xitomatl srfi error-reporting) ER:)
+    (xitomatl srfi records)
+    (xitomatl srfi parameters)
+    (xitomatl srfi private let-opt)
+    (xitomatl srfi private include-resolve))
   
   (define (%latin1->char i)
     (integer->char i))
@@ -53,7 +53,7 @@
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (srfi char-set/14))])
+                    '(library (xitomatl srfi char-set/14))])
       (apply ER:error args)))
     
   (define-syntax check-arg
@@ -65,5 +65,5 @@
              (parameterize ([ER:error-who caller])
                (ER:error "check-arg failed" val)))])))
   
-  (include/resolve ("srfi" "char-set") "srfi-14.scm")
+  (include/resolve ("xitomatl" "srfi" "char-set") "srfi-14.scm")
 )

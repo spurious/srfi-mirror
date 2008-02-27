@@ -1,7 +1,7 @@
-(library (srfi and-let)  
-  ;; can't be named (srfi and-let*) because some OS's filenames can't have *
+(library (xitomatl srfi and-let)  
+  ;; can't be named (xitomatl srfi and-let*) because some OS's filenames can't have *
   (export and-let*)
-  (import (rnrs) (srfi private unique-ids))
+  (import (rnrs) (xitomatl srfi private unique-ids))
   
   (define-syntax and-let*
     (lambda (stx)

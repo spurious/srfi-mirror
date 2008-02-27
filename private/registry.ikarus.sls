@@ -1,8 +1,9 @@
-(library (srfi private registry)
+(library (xitomatl srfi private registry)
   (export 
     aliases
     available-features)
-  (import (rnrs))
+  (import 
+    (rnrs))
   
   (define aliases
     ; construct: ([primary [library-aliases ...] [feature-aliases ...]] ...)

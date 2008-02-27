@@ -1,4 +1,4 @@
-(library (srfi let-values)
+(library (xitomatl srfi let-values)
   (export 
     let-values
     let*-values)

@@ -1,7 +1,7 @@
-(library (srfi specialize-procedures)
+(library (xitomatl srfi specialize-procedures)
   (export cut cute)
-  (import (rnrs) (srfi private include-resolve))
+  (import (rnrs) (xitomatl srfi private include-resolve))
   
-  (include/resolve ("srfi" "specialize-procedures") "cut.scm")
+  (include/resolve ("xitomatl" "srfi" "specialize-procedures") "cut.scm")
   
 )

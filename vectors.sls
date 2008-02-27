@@ -1,4 +1,4 @@
-(library (srfi vectors)
+(library (xitomatl srfi vectors)
   (export
     ;;; * Constructors
     make-vector vector
@@ -35,14 +35,14 @@
                    list->vector)
     (prefix (only (rnrs) vector-fill! vector->list list->vector) rnrs:)
     (rnrs r5rs)
-    (prefix (srfi error-reporting) ER:)
-    (srfi parameters)
-    (srfi receive)
-    (srfi private include-resolve))
+    (prefix (xitomatl srfi error-reporting) ER:)
+    (xitomatl srfi parameters)
+    (xitomatl srfi receive)
+    (xitomatl srfi private include-resolve))
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (srfi vectors/43))])
+                    '(library (xitomatl srfi vectors/43))])
       (apply ER:error args)))
   
   (define-syntax check-type
@@ -60,5 +60,5 @@
                  (parameterize ([ER:error-who callee])
                    (ER:error "erroneous value" v)))))])))
     
-  (include/resolve ("srfi" "vectors") "vector-lib.scm")
+  (include/resolve ("xitomatl" "srfi" "vectors") "vector-lib.scm")
 )

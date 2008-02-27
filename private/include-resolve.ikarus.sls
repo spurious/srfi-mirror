@@ -1,4 +1,4 @@
-(library (srfi private include-resolve)
+(library (xitomatl srfi private include-resolve)
   (export 
     include/resolve)
   (import 

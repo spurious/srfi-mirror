@@ -1,4 +1,4 @@
-(library (srfi random)
+(library (xitomatl srfi random)
   (export random-integer
           random-real
           default-random-source
@@ -13,16 +13,16 @@
   
   (import (except (rnrs) error)
           (rnrs r5rs)                 ; for modulo
-          (srfi parameters)
-          (srfi time)                 ; for time-nanosecond and current-time
-          (prefix (srfi error-reporting) ER:)
-          (srfi private include-resolve)
+          (xitomatl srfi parameters)
+          (xitomatl srfi time)                 ; for time-nanosecond and current-time
+          (prefix (xitomatl srfi error-reporting) ER:)
+          (xitomatl srfi private include-resolve)
           )
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (srfi random/27))])
+                    '(library (xitomatl srfi random/27))])
       (apply ER:error args)))
   
-   (include/resolve ("srfi" "random") "random.ss")
+   (include/resolve ("xitomatl" "srfi" "random") "random.ss")
   )

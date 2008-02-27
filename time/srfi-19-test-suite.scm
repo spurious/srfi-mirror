@@ -1,7 +1,7 @@
 #! /usr/bin/env scheme-script
 ;;; simple test procedures
 (import
-  (srfi time)
+  (xitomatl srfi time)
   (except (ikarus) current-time time time? time-nanosecond time-second)
   (rnrs mutable-pairs))
 

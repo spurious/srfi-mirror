@@ -1,4 +1,4 @@
-(library (srfi private unique-ids)
+(library (xitomatl srfi private unique-ids)
   (export
     duplicate-id
     unique-ids?

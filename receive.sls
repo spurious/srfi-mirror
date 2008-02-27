@@ -1,4 +1,4 @@
-(library (srfi receive)
+(library (xitomatl srfi receive)
   (export receive)
   (import (rnrs))
   

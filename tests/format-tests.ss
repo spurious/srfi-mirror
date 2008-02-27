@@ -1,8 +1,8 @@
 #!/usr/bin/env scheme-script
 (import
   (rename (ikarus) (format ikarus:format))
-  (srfi format)
-  (srfi lightweight-testing))
+  (xitomatl srfi format)
+  (xitomatl srfi lightweight-testing))
 
 #;(define (format-lots n f fmt-str . args)
   (let loop ([i 0] [r #f])

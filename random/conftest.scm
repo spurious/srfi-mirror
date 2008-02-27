@@ -1,5 +1,5 @@
 #!/usr/bin/env scheme-script
-(import (rnrs) (rnrs r5rs) (srfi random))
+(import (rnrs) (rnrs r5rs) (xitomatl srfi random))
 
 ; CONFIDENCE TESTS FOR SRFI-27 "Sources of Random Bits"
 ; =====================================================

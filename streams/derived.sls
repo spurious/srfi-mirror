@@ -20,7 +20,7 @@
 ;;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;;; SOFTWARE.
 
-(library (srfi streams derived)
+(library (xitomatl srfi streams derived)
 
   (export stream-null stream-cons stream? stream-null? stream-pair? stream-car
           stream-cdr stream-lambda define-stream list->stream port->stream stream

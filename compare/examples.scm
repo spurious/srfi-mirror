@@ -6,9 +6,9 @@
 (import (rnrs) 
         (rnrs r5rs)
         (only (ikarus) pretty-print)
-        (srfi random)
-        (srfi eager-comprehensions)
-        (srfi compare))
+        (xitomatl srfi random)
+        (xitomatl srfi eager-comprehensions)
+        (xitomatl srfi compare))
 
 ; Copyright (c) 2005 Sebastian Egner and Jens Axel S{\o}gaard.
 ; 

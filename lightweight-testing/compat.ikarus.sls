@@ -1,4 +1,4 @@
-(library (srfi lightweight-testing compat)
+(library (xitomatl srfi lightweight-testing compat)
   (export
     pretty-print/no-trailing-newline
     with-output-to-string)

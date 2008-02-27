@@ -1,4 +1,4 @@
-(library (srfi args-fold)
+(library (xitomatl srfi args-fold)
   (export
     args-fold
     (rename (make-option option))
@@ -9,7 +9,7 @@
     option-processor)
   (import 
     (rnrs)
-    (srfi private include-resolve))
+    (xitomatl srfi private include-resolve))
   
   
   (define-record-type option
@@ -34,6 +34,6 @@
 
   (define args-fold
     (let ([option make-option])
-      (include/resolve ("srfi" "args-fold") "srfi-37-reference.scm")
+      (include/resolve ("xitomatl" "srfi" "args-fold") "srfi-37-reference.scm")
       args-fold))
 )

@@ -1,4 +1,4 @@
-(library (srfi lightweight-testing)
+(library (xitomatl srfi lightweight-testing)
   (export
     check
     check-ec
@@ -6,7 +6,7 @@
     check-set-mode!
     check-reset!
     check-passed?
-    ;;; All of (srfi eager-comprehensions):
+    ;;; All of (xitomatl srfi eager-comprehensions):
     do-ec list-ec append-ec string-ec string-append-ec vector-ec 
     vector-of-length-ec sum-ec product-ec min-ec max-ec any?-ec 
     every?-ec first-ec last-ec fold-ec fold3-ec 
@@ -16,18 +16,18 @@
     dispatch-union :generator-proc)
   (import 
     (except (rnrs) error)
-    (srfi lightweight-testing compat)
-    (srfi parameters)
-    (srfi private include-resolve)
-    (prefix (srfi error-reporting) ER:)
-    (srfi eager-comprehensions))
+    (xitomatl srfi lightweight-testing compat)
+    (xitomatl srfi parameters)
+    (xitomatl srfi private include-resolve)
+    (prefix (xitomatl srfi error-reporting) ER:)
+    (xitomatl srfi eager-comprehensions))
   
   (define (error . args)
     (parameterize ([ER:error-who
-                    '(library (srfi lightweight-testing/78))])
+                    '(library (xitomatl srfi lightweight-testing/78))])
       (apply ER:error args)))
   
-  (include/resolve ("srfi" "lightweight-testing") "check.scm")
+  (include/resolve ("xitomatl" "srfi" "lightweight-testing") "check.scm")
   
   (set! check:write pretty-print/no-trailing-newline)  
 )

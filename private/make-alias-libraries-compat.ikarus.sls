@@ -1,4 +1,4 @@
-(library (srfi private make-alias-libraries-compat)
+(library (xitomatl srfi private make-alias-libraries-compat)
   (export
     impl-name-ext printf pretty-print)
   (import

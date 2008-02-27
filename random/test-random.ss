@@ -1,5 +1,5 @@
 #!/usr/bin/env scheme-script
-(import (rnrs) (srfi random))
+(import (rnrs) (xitomatl srfi random))
 
 (do ((i 0 (+ i 1)))
   ((= i 10) 'done)

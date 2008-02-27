@@ -1,4 +1,4 @@
-(library (srfi rec)
+(library (xitomatl srfi rec)
   (export rec)
   (import (rnrs))
   

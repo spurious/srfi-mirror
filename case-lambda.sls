@@ -1,4 +1,4 @@
-(library (srfi case-lambda)
+(library (xitomatl srfi case-lambda)
   (export 
     case-lambda)
   (import 

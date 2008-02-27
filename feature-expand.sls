@@ -1,6 +1,6 @@
-(library (srfi feature-expand)
+(library (xitomatl srfi feature-expand)
   (export cond-expand)
-  (import (rnrs) (srfi private registry))
+  (import (rnrs) (xitomatl srfi private registry))
   
   (define-syntax cond-expand
     (lambda (stx)

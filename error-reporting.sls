@@ -1,8 +1,8 @@
-(library (srfi error-reporting)
+(library (xitomatl srfi error-reporting)
   (export error error-who)
   (import 
     (rename (rnrs base) (error rnrs:error))
-    (srfi parameters))
+    (xitomatl srfi parameters))
   
   (define error-who (make-parameter #f))
   
