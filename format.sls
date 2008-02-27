@@ -106,9 +106,10 @@
            (string-grow number-or-string width #\space)
            ]
           [(number? number-or-string)
-           (let ( [real (real-part number-or-string)]
-                  [imag (imag-part number-or-string)]
-                  )
+           (let* ( [num (real-part number-or-string)]
+                   [real (if digits (+ 0.0 num) num)]
+                   [imag (imag-part number-or-string)]
+                 )
              (cond
                [(not (zero? imag))
                 (string-grow
@@ -121,17 +122,15 @@
                 ]
                [digits
                 (let* ( [num-str   (number->string (if (rational? real)
-                                                     (+ 0.0 real)
-                                                     real))]
+                                                       (+ 0.0 real)
+                                                       real))]
                         [dot-index (string-index  num-str #\.)]
                         [exp-index (string-index  num-str #\e)]
                         [length    (string-length num-str)]
                         [pre-string
                          (cond
-                           (exp-index
-                            (if dot-index
-                              (substring num-str 0 dot-index)
-                              (substring num-str 0 (+ exp-index 1)))
+                           ((and exp-index (not dot-index))
+                            (substring num-str 0 exp-index)
                             )
                            (dot-index
                             (substring num-str 0 dot-index)
@@ -143,9 +142,10 @@
                          (if exp-index (substring num-str exp-index length) "")
                          ]
                         [frac-string
-                         (if exp-index
-                           (substring num-str (+ dot-index 1) exp-index)
-                           (substring num-str (+ dot-index 1) length))
+                         (let ( (dot-idx (if dot-index dot-index -1)) )
+                           (if exp-index
+                               (substring num-str (+ dot-idx 1) exp-index)
+                               (substring num-str (+ dot-idx 1) length)))
                          ]
                         )
                   (string-grow
@@ -165,6 +165,7 @@
            (error 'format "~F requires a number or a string" number-or-string)])
         )
       
+
       (define documentation-string
         "(format [<port>] <format-string> [<arg>...]) -- <port> is #t, #f or an output-port
 OPTION  [MNEMONIC]      DESCRIPTION     -- Implementation Assumes ASCII Text Encoding
@@ -336,10 +337,12 @@ OPTION  [MNEMONIC]      DESCRIPTION     -- Implementation Assumes ASCII Text Enc
                                            (cons next-char d-digits)
                                            in-width?))
                                    ]
-                                  [(char=? next-char #\F)
+                                  [(char=? (char-upcase next-char) #\F)
                                    (let ( [width
                                            (string->number
-                                            (list->string (reverse w-digits)))]
+                                            (list->string
+                                             (reverse w-digits)))
+                                           ]
                                           [digits
                                            (if (zero? (length d-digits))
                                              #f
@@ -360,7 +363,7 @@ OPTION  [MNEMONIC]      DESCRIPTION     -- Implementation Assumes ASCII Text Enc
                                      (problem "too many commas in directive" format-strg))
                                    ]
                                   [else
-                                   (problem "~w.dF directive ill-formed" format-strg)])))
+                                   (problem "~w,dF directive ill-formed" format-strg)])))
                             ))
                          ((#\? #\K)       ; indirection -- take next arg as format string
                           (cond           ;  and following arg as list of format args
