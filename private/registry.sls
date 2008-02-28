@@ -1,19 +1,15 @@
 (library (xitomatl srfi private registry)
-  (export 
-    aliases
+  (export
     available-features)
   (import 
-    (rnrs))
+    (rnrs)
+    (xitomatl srfi private implementation-features))
   
   (define aliases
-    ; construct: ([primary [library-aliases ...] [feature-aliases ...]] ...)
+    ; construct: ([primary [feature-aliases ...]] ...)
     (map 
       (lambda (x)
-        (define pn (car x))
-        (define cns (number->string (cadr x)))
-        (list pn 
-              `[(srfi ,(string->symbol cns))]
-              `[,(string->symbol (string-append "srfi-" cns))]))
+        (list (car x) `[,(string->symbol (string-append "srfi-" (number->string (cadr x))))]))
       ;      primary                SRFI code number
       '([(srfi feature-expand)          0]
         [(srfi lists)                   1]
@@ -40,23 +36,15 @@
         [(srfi compare)                67]
         [(srfi lightweight-testing)    78])))
   
-  (define implementation-features
-    '(ikarus r6rs))
-  
-  (define additional-features
-    '())
-  
   (define available-features
-    ; construct: (implementation-features ...
-    ;             additional-features ...
-    ;             primary0 library-aliases0 ... feature-aliases0 ... 
-    ;             ... 
-    ;             primaryN library-aliasesN ... feature-aliasesN)
-    (apply append 
+    ; construct: (r6rs
+    ;             implementation-features ...
+    ;             primary0 feature-aliases0 ... 
+    ;             ...)
+    (apply append
+           '(r6rs)
            implementation-features
-           additional-features
-           (map (lambda (al)
-                  (cons (car al) (append (cadr al) (caddr al))))
+           (map (lambda (al) (cons (car al) (cadr al)))
                 aliases)))
   
   

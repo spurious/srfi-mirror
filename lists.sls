@@ -245,7 +245,7 @@
 
 ;;; Make a list of length LEN.
 
-;;; already in ikarus.
+;;; Already in R6RS.
 ;;; (define (make-list len . maybe-elt)
 ;;;   (check-arg (lambda (n) (and (integer? n) (>= n 0))) len make-list)
 ;;;   (let ((elt (cond ((null? maybe-elt) #f) ; Default value
@@ -274,7 +274,7 @@
 ;;;
 ;;; (cons first (unfold not-pair? car cdr rest values))
 
-; Already in Ikarus
+; Already in R6RS
 ;(define (cons* first . rest)
 ;  (let recur ((x first) (rest rest))
 ;    (if (pair? rest)
@@ -639,7 +639,7 @@
 
 (define (last lis) (car (last-pair lis)))
 
-;;; already in ikarus
+;;; Already in R6RS
 ;;;(define (last-pair lis)
 ;;;  (check-arg pair? lis last-pair)
 ;;;  (let lp ((lis lis))
@@ -913,7 +913,7 @@
 	(if (null-list? lis) ans
 	    (lp (cdr lis) (kons (car lis) ans))))))
 
-; Already in Ikarus
+; Already in R6RS
 ;(define (fold-right kons knil lis1 . lists)
 ;  (check-arg procedure? kons fold-right)
 ;  (if (pair? lists)
@@ -1084,7 +1084,7 @@
 ;; This FILTER shares the longest tail of L that has no deleted elements.
 ;; If Scheme had multi-continuation calls, they could be made more efficient.
 
-; Already in Ikarus
+; Already in R6RS
 ;(define (filter pred lis)			; Sleazing with EQ? makes this
 ;  (check-arg procedure? pred filter)		; one faster.
 ;  (let recur ((lis lis))		
@@ -1174,7 +1174,7 @@
 ;;; Answers share common tail with LIS where possible; 
 ;;; the technique is slightly subtle.
 
-; Already in Ikarus
+; Already in R6RS
 ;(define (partition pred lis)
 ;  (check-arg procedure? pred partition)
 ;  (let recur ((lis lis))
@@ -1254,7 +1254,7 @@
 
 
 ;;; Inline us, please.
-; Already in Ikarus
+; Already in R6RS
 ;(define (remove  pred l) (filter  (lambda (x) (not (pred x))) l))
 (define (remove! pred l) (filter! (lambda (x) (not (pred x))) l))
 
@@ -1377,7 +1377,7 @@
 ;;; find find-tail take-while drop-while span break any every list-index
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Already in Ikarus
+; Already in R6RS
 ;(define (find pred list)
 ;  (cond ((find-tail pred list) => car)
 ;	(else #f)))

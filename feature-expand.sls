@@ -1,12 +1,15 @@
 (library (xitomatl srfi feature-expand)
-  (export cond-expand)
-  (import (rnrs) (xitomatl srfi private registry))
+  (export 
+    cond-expand)
+  (import
+    (rnrs)
+    (xitomatl srfi private registry))
   
   (define-syntax cond-expand
     (lambda (stx)
       (syntax-case stx (and or not else)
         [(_) 
-         (syntax-violation 'cond-expand "Unfulfilled cond-expand" #f)]
+         (syntax-violation #f "Unfulfilled cond-expand" stx)]
         [(_ (else body ...))
          #'(begin body ...)]
         [(_ ((and) body ...) more-clauses ...)
