@@ -30,4 +30,5 @@
           stream-of stream-range stream-ref stream-reverse stream-scan stream-take
           stream-take-while stream-unfold stream-unfolds stream-zip)
 
-  (import (streams primitive) (streams derived)))
+  (import (xitomatl srfi streams primitive)
+          (xitomatl srfi streams derived)))
