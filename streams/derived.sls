@@ -30,7 +30,7 @@
           stream-of stream-range stream-ref stream-reverse stream-scan stream-take
           stream-take-while stream-unfold stream-unfolds stream-zip)
 
-  (import (rnrs) (streams primitive))
+  (import (rnrs) (xitomatl srfi streams primitive))
 
   (define-syntax define-stream
     (syntax-rules ()
