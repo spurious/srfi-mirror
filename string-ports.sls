@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi string-ports)
   (export
     open-input-string

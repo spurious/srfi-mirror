@@ -1,4 +1,5 @@
 #! /usr/bin/env scheme-script
+#!r6rs
 ; <PLAINTEXT>
 ; Copyright (c) 2005-2006 Sebastian Egner.
 ; 

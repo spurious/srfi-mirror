@@ -1,6 +1,8 @@
 #!/usr/bin/env scheme-script
+#!r6rs
 (import
-  (rename (ikarus) (format ikarus:format))
+  (rnrs)
+  (rnrs mutable-pairs)
   (xitomatl srfi format)
   (xitomatl srfi lightweight-testing))
 

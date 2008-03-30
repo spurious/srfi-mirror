@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi strings)
   (export
     string-map string-map!

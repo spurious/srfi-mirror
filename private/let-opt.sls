@@ -1,3 +1,4 @@
+#!r6rs
 ;;; LET-OPTIONALS macros
 ;;; Copyright (c) 2001 by Olin Shivers.
 

@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi char-set)
   (export
     ; Predicates & comparison

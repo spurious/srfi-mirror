@@ -1,3 +1,4 @@
+#!r6rs
 (import
   (rnrs base) ; no R6RS records
   (only (rnrs io simple) display write newline)

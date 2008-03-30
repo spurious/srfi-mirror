@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi time)
   (export
     time make-time time? time-type time-nanosecond time-second

@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi and-let)  
   ;; can't be named (xitomatl srfi and-let*) because some OS's filenames can't have *
   (export and-let*)

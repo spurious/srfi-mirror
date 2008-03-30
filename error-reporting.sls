@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi error-reporting)
   (export error error-who)
   (import 

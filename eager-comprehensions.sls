@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi eager-comprehensions)
   (export
     do-ec list-ec append-ec string-ec string-append-ec vector-ec 

@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi vectors)
   (export
     ;;; * Constructors

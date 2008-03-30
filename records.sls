@@ -1,3 +1,4 @@
+#!r6rs
 ; By Derick Eddington
 
 (library (xitomatl srfi records)
@@ -40,7 +41,7 @@
                (sealed #t)
                (protocol (lambda (ctor)
                            (lambda (constructor-tag ...)
-                             (define unspec-tag (if #f #f))
+                             (define unspec-tag)
                              ...
                              (ctor field-tag ...))))
                (fields field-clause ...)))])))

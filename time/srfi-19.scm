@@ -1,7 +1,8 @@
 ;; SRFI-19: Time Data Types and Procedures.
 ;;
 ;; Modified by Derick Eddington to be included into the (xitomatl srfi time) R6RS library.
-;; TODO: Once Ikarus has threads, the thread timing stuff can probably be made to work.
+;; TODO: For implementations which have threads, 
+;;       the thread timing stuff can probably be made to work.
 ;; 
 ;; Copyright (C) I/NET, Inc. (2000, 2002, 2003). All Rights Reserved. 
 ;; 
@@ -255,7 +256,7 @@
 
 
 ;;; the time structure; creates the accessors, too.
-;;; wf: changed to match srfi documentation. uses mzscheme structures & inspectors
+;;; wf: changed to match srfi documentation.
 
 (define-record-type time 
   (fields 
@@ -334,22 +335,18 @@
       (else (tm:time-error 'current-time 'invalid-clock-type clock-type)))))
 
 
-
 ;; -- time resolution
 ;; this is the resolution of the clock in nanoseconds.
 ;; this will be implementation specific.
-;; Ikarus uses gettimeofday() which gives microseconds,
-;; so our resolution is 1000 nanoseconds
-
 (define (time-resolution . clock-type)
   (let ((clock-type (:optional clock-type time-utc)))
     (cond
-      ((eq? clock-type time-tai) 1000)
-      ((eq? clock-type time-utc) 1000)
-      ((eq? clock-type time-monotonic) 1000)
-      #|((eq? clock-type time-thread) 1000)
-      ((eq? clock-type time-process) 1000)
-      ((eq? clock-type time-gc) 1000)|#
+      ((eq? clock-type time-tai) host:time-resolution)
+      ((eq? clock-type time-utc) host:time-resolution)
+      ((eq? clock-type time-monotonic) host:time-resolution)
+      #|((eq? clock-type time-thread) host:time-resolution)
+      ((eq? clock-type time-process) host:time-resolution)
+      ((eq? clock-type time-gc) host:time-resolution)|#
       (else (tm:time-error 'time-resolution 'invalid-clock-type clock-type)))))
 
 ;; -- time comparisons

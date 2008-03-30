@@ -1,4 +1,5 @@
 #! /usr/bin/env scheme-script
+#!r6rs
 ; <PLAINTEXT>
 ; Examples for Eager Comprehensions in [outer..inner|expr]-Convention
 ; ===================================================================

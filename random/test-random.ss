@@ -1,4 +1,5 @@
 #!/usr/bin/env scheme-script
+#!r6rs
 (import (rnrs) (xitomatl srfi random))
 
 (do ((i 0 (+ i 1)))

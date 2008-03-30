@@ -1,5 +1,5 @@
 #!/usr/bin/env scheme-script
-
+#!r6rs
 (import (rnrs) (xitomatl srfi rec))
 
 (display 

@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi random)
   (export random-integer
           random-real

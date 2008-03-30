@@ -1,3 +1,4 @@
+#!r6rs
 (library (xitomatl srfi lightweight-testing)
   (export
     check
