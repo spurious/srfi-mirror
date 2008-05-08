@@ -5,8 +5,9 @@
   
   (define-syntax receive
     (syntax-rules ()
-      ((receive formals expression body ...)
-       (call-with-values (lambda () expression)
-                         (lambda formals body ...)))))
+      [(_ formals expression b b* ...)
+       (call-with-values 
+         (lambda () expression)
+         (lambda formals b b* ...))]))
   
 )

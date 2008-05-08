@@ -13,9 +13,9 @@
           random-source-make-reals)
   
   (import (except (rnrs) error)
-          (rnrs r5rs)                 ; for modulo
+          (rnrs r5rs)
           (xitomatl srfi parameters)
-          (xitomatl srfi time)                 ; for time-nanosecond and current-time
+          (only (xitomatl srfi time) time-nanosecond current-time)
           (prefix (xitomatl srfi error-reporting) ER:)
           (xitomatl srfi private include-resolve)
           )

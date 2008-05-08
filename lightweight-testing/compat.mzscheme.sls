@@ -1,9 +1,10 @@
+#!r6rs
 (library (xitomatl srfi lightweight-testing compat)
   (export
     pretty-print/no-trailing-newline)
   (import
     (rnrs)
-    (only (ikarus) pretty-print))
+    (only (scheme pretty) pretty-print))
   
   ;;; check.scm says a pretty-print with a trailing newline 
   ;;; will make its print-outs look bad, so:

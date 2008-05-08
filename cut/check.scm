@@ -27,7 +27,7 @@
   (xitomatl srfi parameters))
 
 (define (check expr)
-  (if (not (eq? (eval expr (environment '(rnrs) '(xitomatl srfi specialize-procedures)))
+  (if (not (eq? (eval expr (environment '(rnrs) '(xitomatl srfi cut)))
                 #t))
       (parameterize ([error-who 'check])
         (error "check failed" expr))))

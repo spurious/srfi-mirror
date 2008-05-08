@@ -12,9 +12,9 @@
       (lambda (x)
         (list (car x) `[,(string->symbol (string-append "srfi-" (number->string (cadr x))))]))
       ;      primary                SRFI code number
-      '([(srfi feature-expand)          0]
+      '([(srfi cond-expand)             0]
         [(srfi lists)                   1]
-        [(srfi and-let)                 2]
+        [(srfi and-let*)                2]
         [(srfi string-ports)            6]
         [(srfi receive)                 8]
         [(srfi records)                 9]
@@ -24,7 +24,7 @@
         [(srfi case-lambda)            16]
         [(srfi time)                   19]
         [(srfi error-reporting)        23]
-        [(srfi specialize-procedures)  26]
+        [(srfi cut)                    26]
         [(srfi random)                 27]
         [(srfi rec)                    31]
         [(srfi args-fold)              37]

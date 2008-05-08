@@ -1,9 +1,11 @@
 #! /usr/bin/env scheme-script
 ;;; simple test procedures
+#!r6rs
 (import
+  (rnrs)
+  (rnrs mutable-pairs)
   (xitomatl srfi time)
-  (except (ikarus) current-time time time? time-nanosecond time-second)
-  (rnrs mutable-pairs))
+  (only (xitomatl common-unstandard) printf))
 
 (define s19-tests (list))
 
@@ -215,7 +217,6 @@
 (define (date->string/all-formats)
   ; TODO: figure out why ~f isn't working
   ; TODO: figure out why ~x and ~X aren't doing what the srfi-19 doc says they do
-  (import (only (ikarus) printf))
   (define fs
     '("~~" "~a" "~A" "~b" "~B" "~c" "~d" "~D" "~e" #;"~f" "~h" "~H"
       "~I" "~j" "~k" "~l" "~m" "~M" "~n" "~N" "~p" "~r" "~s"

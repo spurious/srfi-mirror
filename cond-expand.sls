@@ -1,10 +1,10 @@
 #!r6rs
-(library (xitomatl srfi feature-expand)
+(library (xitomatl srfi cond-expand)
   (export 
     cond-expand)
   (import
     (rnrs)
-    (xitomatl srfi private registry))
+    (for (xitomatl srfi private registry) expand))
   
   (define-syntax cond-expand
     (lambda (stx)

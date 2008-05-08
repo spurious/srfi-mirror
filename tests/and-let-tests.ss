@@ -3,7 +3,7 @@
 (import 
   (rnrs)
   (rnrs eval)
-  (xitomatl srfi and-let)
+  (xitomatl srfi and-let*)
   (xitomatl srfi lightweight-testing))
 
 (define-syntax expect
@@ -16,7 +16,7 @@
     [(_ expr)
      (check 
        (guard (ex [#t (syntax-violation? ex)])  
-         (eval 'expr (environment '(rnrs) '(xitomatl srfi and-let))))
+         (eval 'expr (environment '(rnrs) '(xitomatl srfi and-let*))))
        => #t)]))
 
 ;;; Taken straight from the reference implementation tests

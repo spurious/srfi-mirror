@@ -1,11 +1,11 @@
 #!/usr/bin/env scheme-script
-
+#!r6rs
 ;;; NOTE: All tests of complex numbers have been commented out,
 ;;;       since many complex primitives are missing.
 
 (import (rnrs) 
         (rnrs r5rs)
-        (only (ikarus) pretty-print)
+        (rename (only (rnrs) write) (write pretty-print))
         (xitomatl srfi random)
         (xitomatl srfi eager-comprehensions)
         (xitomatl srfi compare))
