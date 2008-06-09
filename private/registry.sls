@@ -34,6 +34,7 @@
         [(srfi eager-comprehensions)   42]
         [(srfi vectors)                43]
         [(srfi format)                 48]
+        [(srfi general-cond)           61]
         [(srfi compare)                67]
         [(srfi lightweight-testing)    78])))
   
