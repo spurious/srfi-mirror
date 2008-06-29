@@ -34,12 +34,9 @@
     char-set:empty       char-set:full
     )
   (import
-    (except (rnrs base) error)
+    (except (rnrs) error define-record-type)
     (rnrs mutable-strings)
     (rnrs r5rs)
-    (rnrs arithmetic bitwise)
-    (rnrs control)
-    (rnrs syntax-case)
     (prefix (xitomatl srfi error-reporting) ER:)
     (xitomatl srfi records)
     (xitomatl srfi parameters)

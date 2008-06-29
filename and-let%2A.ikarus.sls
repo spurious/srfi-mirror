@@ -12,7 +12,7 @@
         (syntax-case c () [(var expr) #'var] [_ #f]))
       (syntax-case stx ()
         [(_ (clause* ...) body* ...)
-         (formals-ok? (filter values (map get-id #'(clause* ...))) stx)
+         (for-all identifier? (filter values (map get-id #'(clause* ...))))
          #'(and-let*-core #t (clause* ...) body* ...)])))
   
   (define-syntax and-let*-core

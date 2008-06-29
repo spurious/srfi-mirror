@@ -28,6 +28,7 @@
     string-copy! substring/shared
     string-reverse string-reverse! reverse-list->string
     string-concatenate string-concatenate/shared string-concatenate-reverse
+    string-concatenate-reverse/shared
     string-append/shared
     xsubstring string-xcopy!
     string-null?
@@ -48,13 +49,10 @@
     substring-spec-ok?)
     )
   (import
-    (except (rnrs base) error string-copy string-for-each string->list)
+    (except (rnrs) error string-copy string-for-each string->list
+                   string-upcase string-downcase string-titlecase string-hash)
     (except (rnrs mutable-strings) string-fill!)
-    (except (rnrs unicode) string-upcase string-downcase string-titlecase)
-    (rnrs arithmetic bitwise)
-    (rnrs control)
     (rnrs r5rs)
-    (rnrs syntax-case)
     (prefix (xitomatl srfi error-reporting) ER:)
     (xitomatl srfi receive)
     (xitomatl srfi char-set)
