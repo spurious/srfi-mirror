@@ -6,15 +6,31 @@
     read-with-shared-structure
     (rename (read-with-shared-structure read/ss)))
   (import
-    (rnrs)
-    (only (scheme base) parameterize print-graph read-accept-graph))
+    (except (rnrs) read write)
+    (only (scheme base) read write parameterize print-graph read-accept-graph))
   
-  (define (write-with-shared-structure . args)
-    (parameterize ([print-graph #t]) 
-      (apply write args)))
+  ;;; NOTE: Not using R6RS read and write probably means the 
+  ;;;       full R6RS lexical does not work.  PLT should be
+  ;;;       persuaded to make their print-graph and read-accept-graph
+  ;;;       extend their R6RS read and write.
   
-  (define (read-with-shared-structure . args)
-    (parameterize ([read-accept-graph #t]) 
-      (apply read args)))
+  (define write-with-shared-structure
+    (case-lambda 
+      [(obj)
+       (write-with-shared-structure obj (current-output-port))]
+      [(obj port)
+       (parameterize ([print-graph #t])
+         (write obj port))]
+      [(obj port optarg)
+       (assertion-violation 'write-with-shared-structure
+         "this implementation does not support optarg")]))
+  
+  (define read-with-shared-structure
+    (case-lambda
+      [()
+       (read-with-shared-structure (current-input-port))]
+      [(port)
+       (parameterize ([read-accept-graph #t]) 
+         (read port))]))
   
 )

@@ -9,15 +9,15 @@
     (only (ikarus) print-graph parameterize))
   
   (define write-with-shared-structure
-    (case-lambda
+    (case-lambda 
+      [(obj)
+       (write-with-shared-structure obj (current-output-port))]
+      [(obj port)
+       (parameterize ([print-graph #t])
+         (write obj port))]
       [(obj port optarg)
        (assertion-violation 'write-with-shared-structure
-         "this implementation does not support optarg")] 
-      [args
-       #;(unless (output-port? port)  ;; ikarus's write type-checks port
-         (assertion-violation 'write-with-shared-structure "not an output-port" port))
-       (parameterize ([print-graph #t])
-         (apply write args))]))
+         "this implementation does not support optarg")]))
   
   (define read-with-shared-structure read)
   

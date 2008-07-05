@@ -1,3 +1,6 @@
+;;; NOTE: This code does not support full R6RS lexical syntax.
+;;;       Larceny should supply the functionality.
+
 (library (xitomatl srfi sharing)
   (export
     write-with-shared-structure
