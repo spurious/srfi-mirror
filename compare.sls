@@ -24,7 +24,7 @@
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (xitomatl srfi compare/67))])
+                    "(library (xitomatl srfi compare))"])
       (apply ER:error args)))
   
   (include/resolve ("xitomatl" "srfi" "compare") "compare.ss")  

@@ -43,7 +43,7 @@
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (xitomatl srfi vectors/43))])
+                    "(library (xitomatl srfi vectors))"])
       (apply ER:error args)))
   
   (define-syntax check-type

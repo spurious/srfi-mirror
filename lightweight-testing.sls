@@ -25,7 +25,7 @@
   
   (define (error . args)
     (parameterize ([ER:error-who
-                    '(library (xitomatl srfi lightweight-testing/78))])
+                    "(library (xitomatl srfi lightweight-testing))"])
       (apply ER:error args)))
   
   (include/resolve ("xitomatl" "srfi" "lightweight-testing") "check.scm")

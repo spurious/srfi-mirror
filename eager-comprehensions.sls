@@ -17,7 +17,7 @@
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (xitomatl srfi eager-comprehensions/42))])
+                    "(library (xitomatl srfi eager-comprehensions))"])
       (apply ER:error args)))
   
   (include/resolve ("xitomatl" "srfi" "eager-comprehensions") "ec.scm")  

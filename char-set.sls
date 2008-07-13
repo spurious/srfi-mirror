@@ -51,7 +51,7 @@
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (xitomatl srfi char-set/14))])
+                    "(library (xitomatl srfi char-set))"])
       (apply ER:error args)))
     
   (define-syntax check-arg

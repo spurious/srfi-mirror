@@ -22,7 +22,7 @@
   
   (define (error . args)
     (parameterize ([ER:error-who 
-                    '(library (xitomatl srfi random/27))])
+                    "(library (xitomatl srfi random))"])
       (apply ER:error args)))
   
    (include/resolve ("xitomatl" "srfi" "random") "random.ss")
