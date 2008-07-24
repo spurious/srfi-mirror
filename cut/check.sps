@@ -1,4 +1,3 @@
-#! /usr/bin/env scheme-script
 #!r6rs
 ; CONFIDENCE TEST FOR IMPLEMENTATION OF SRFI-26
 ; =============================================

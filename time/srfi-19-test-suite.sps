@@ -1,4 +1,3 @@
-#! /usr/bin/env scheme-script
 ;;; simple test procedures
 #!r6rs
 (import

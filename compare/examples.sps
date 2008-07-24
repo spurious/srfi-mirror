@@ -1,4 +1,3 @@
-#!/usr/bin/env scheme-script
 #!r6rs
 ;;; NOTE: All tests of complex numbers have been commented out,
 ;;;       since many complex primitives are missing.
