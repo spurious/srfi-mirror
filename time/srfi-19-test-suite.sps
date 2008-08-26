@@ -4,7 +4,10 @@
   (rnrs)
   (rnrs mutable-pairs)
   (xitomatl srfi time)
-  (only (xitomatl common-unstandard) printf))
+  (xitomatl srfi format))
+
+(define (printf fmt-str . args)
+  (display (apply format fmt-str args)))
 
 (define s19-tests (list))
 

@@ -10,8 +10,8 @@
     (only (scheme base) read write parameterize print-graph read-accept-graph))
   
   ;;; NOTE: Not using R6RS read and write probably means the 
-  ;;;       full R6RS lexical does not work.  PLT should be
-  ;;;       persuaded to make their print-graph and read-accept-graph
+  ;;;       full R6RS lexical syntax does not work.  PLT should be
+  ;;;       asked to make their print-graph and read-accept-graph
   ;;;       extend their R6RS read and write.
   
   (define write-with-shared-structure

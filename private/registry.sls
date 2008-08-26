@@ -6,48 +6,42 @@
     (rnrs)
     (xitomatl srfi private implementation-features))
   
-  (define aliases
-    ; construct: ([primary [feature-aliases ...]] ...)
+  (define srfi-features
     (map 
-      (lambda (x)
-        (list (car x) `[,(string->symbol (string-append "srfi-" (number->string (cadr x))))]))
-      ;      primary                SRFI code number
-      '([(srfi cond-expand)             0]
-        [(srfi lists)                   1]
-        [(srfi and-let*)                2]
-        [(srfi string-ports)            6]
-        [(srfi receive)                 8]
-        [(srfi records)                 9]
-        [(srfi let-values)             11]
-        [(srfi strings)                13]
-        [(srfi char-set)               14]
-        [(srfi case-lambda)            16]
-        [(srfi time)                   19]
-        [(srfi error-reporting)        23]
-        [(srfi cut)                    26]
-        [(srfi random)                 27]
-        [(srfi rec)                    31]
-        [(srfi args-fold)              37]
-        [(srfi sharing)                38]
-        [(srfi parameters)             39]
-        [(srfi streams)                41]
-        [(srfi eager-comprehensions)   42]
-        [(srfi vectors)                43]
-        [(srfi format)                 48]
-        [(srfi general-cond)           61]
-        [(srfi compare)                67]
-        [(srfi lightweight-testing)    78])))
+     (lambda (x)
+       (list `(xitomatl srfi ,(car x)) 
+             (string->symbol (string-append "srfi-" (number->string (cadr x))))))
+     ;  xitomatl name     SRFI code number
+     '([cond-expand             0]
+       [lists                   1]
+       [and-let*                2]
+       [string-ports            6]
+       [receive                 8]
+       [records                 9]
+       [let-values             11]
+       [strings                13]
+       [char-set               14]
+       [case-lambda            16]
+       [time                   19]
+       [error-reporting        23]
+       [cut                    26]
+       [random                 27]
+       [rec                    31]
+       [args-fold              37]
+       [sharing                38]
+       [parameters             39]
+       [streams                41]
+       [eager-comprehensions   42]
+       [vectors                43]
+       [format                 48]
+       [general-cond           61]
+       [compare                67]
+       [lightweight-testing    78])))
   
   (define available-features
-    ; construct: (r6rs
-    ;             implementation-features ...
-    ;             primary0 feature-aliases0 ... 
-    ;             ...)
     (apply append
            '(r6rs)
            implementation-features
-           (map (lambda (al) (cons (car al) (cadr al)))
-                aliases)))
-  
+           srfi-features))
   
 )

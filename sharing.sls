@@ -1,16 +1,17 @@
-;;; NOTE: This code does not support full R6RS lexical syntax.
-;;;       Larceny should supply the functionality.
+;;; NOTE: This pre-R6RS code does not support full R6RS lexical syntax.
+;;;       This library is a last resort fall-back because the R6RS
+;;;       implementation should supply this functionality.
 
 (library (xitomatl srfi sharing)
   (export
     write-with-shared-structure
+    (rename (write-with-shared-structure write/ss))
     read-with-shared-structure
-    )
+    (rename (read-with-shared-structure read/ss)))
   (import
-    (rnrs) ;; define
-    (rnrs mutable-pairs   (6))
-    (rnrs mutable-strings (6))
-    )
+    (rnrs)
+    (rnrs mutable-pairs)
+    (rnrs mutable-strings))
 
 
 ;;; Copyright (C) Ray Dillinger 2003. All Rights Reserved. 
