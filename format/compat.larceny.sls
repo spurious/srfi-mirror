@@ -3,7 +3,7 @@
     pretty-print
     ascii-tab)
   (import
-    (r5rs) ;; define
+    (rnrs base)
     (primitives pretty-print))
   
   (define ascii-tab #\tab)
