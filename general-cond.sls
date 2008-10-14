@@ -7,7 +7,7 @@
   
   (define-syntax general-cond
     (lambda (stx)
-      (syntax-case stx (=>)
+      (syntax-case stx ()
         [(_ clauses ...)
          (with-syntax ([(ours ...)
                         (map (lambda (c)
