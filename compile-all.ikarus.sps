@@ -1,3 +1,4 @@
+;;; Written by Derick Eddington and placed in the public domain.
 
 ;;; run ikarus --compile-dependencies compile-all.ikarus.sps
 ;;; after you put the xitomatl folder in your ikarus 

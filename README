@@ -1,0 +1,55 @@
+Scheme Requests for Implementation (SRFIs) for R6RS
+---------------------------------------------------
+
+A basic framework for SRFIs made into R6RS libraries.  They live under the
+`(xitomatl srfi ---)' library namespace (which is Derick's and is used here for
+lack of thinking of a different one to use).  There is a registry of available
+SRFIs which works alongside SRFI-0 Feature-Based Conditional Expansion.  The
+porting done so far is mostly just taking the reference implementations from
+http://srfi.schemers.org and wrapping them in libraries and tweaking the few
+things needed to make them work in R6RS libraries and with implementations'
+functionality.  Supporting any R6RS implementation supporting the *.IMPL.sls
+convention is easy.  The ports and the framework started as just an exercise
+in using R6RS.  If you have other ideas, let's see if we can collaborate.
+
+NOTE: You might need to place the srfi/ directory in a directory named
+"xitomatl" so your R6RS implementation(s) will be able to locate these
+libraries.  The xitomatl/ directory can be empty.  This collection of
+libraries has no dependencies on other libraries (other than `(rnrs)'
+and other implementation-internal libraries).
+
+These SRFIs are available:
+  SRFI-0:  (xitomatl srfi cond-expand)
+  SRFI-1:  (xitomatl srfi lists)
+  SRFI-2:  (xitomatl srfi and-let*)
+  SRFI-6:  (xitomatl srfi string-ports)
+  SRFI-8:  (xitomatl srfi receive)
+  SRFI-9:  (xitomatl srfi records)
+  SRFI-11: (xitomatl srfi let-values)
+  SRFI-13: (xitomatl srfi strings)
+  SRFI-14: (xitomatl srfi char-set)
+  SRFI-16: (xitomatl srfi case-lambda)
+  SRFI-19: (xitomatl srfi time)
+  SRFI-23: (xitomatl srfi error-reporting)
+  SRFI-26: (xitomatl srfi cut)
+  SRFI-27: (xitomatl srfi random)
+  SRFI-31: (xitomatl srfi rec)
+  SRFI-37: (xitomatl srfi args-fold)
+  SRFI-38: (xitomatl srfi sharing)
+  SRFI-39: (xitomatl srfi parameters)
+  SRFI-41: (xitomatl srfi streams)
+  SRFI-42: (xitomatl srfi eager-comprehensions)
+  SRFI-43: (xitomatl srfi vectors)
+  SRFI-48: (xitomatl srfi format)
+  SRFI-61: (xitomatl srfi general-cond)
+  SRFI-67: (xitomatl srfi compare)
+  SRFI-78: (xitomatl srfi lightweight-testing)
+  
+For the latest development version, go to:
+
+  https://code.launchpad.net/~ikarus-libraries-team/ikarus-libraries/srfi
+
+If you already have ported SRFIs to R6RS, we'd love to assimilate them.  You
+can let us know by "asking a question" at the Ikarus Libraries project page:
+https://launchpad.net/ikarus-libraries
+
