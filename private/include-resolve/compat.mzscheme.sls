@@ -23,7 +23,7 @@
 ;;; DEALINGS IN THE SOFTWARE.
 
 #!r6rs
-(library (xitomatl srfi private include-resolve compat)
+(library (srfi private include-resolve compat)
   (export
     search-paths)
   (import

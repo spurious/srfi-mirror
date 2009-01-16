@@ -23,7 +23,7 @@
 ;;; DEALINGS IN THE SOFTWARE.
 
 #!r6rs
-(import (rnrs) (xitomatl srfi rec))
+(import (rnrs) (srfi :31 rec))
 
 (display 
  ((rec (F N) 

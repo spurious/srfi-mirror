@@ -22,7 +22,7 @@
 ;;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 ;;; DEALINGS IN THE SOFTWARE.
 
-(library (xitomatl srfi private implementation-features)
+(library (srfi private implementation-features)
   (export
     OS-features
     implementation-features)

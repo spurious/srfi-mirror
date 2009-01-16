@@ -23,44 +23,88 @@
 ;;; DEALINGS IN THE SOFTWARE.
 
 #!r6rs
-(library (xitomatl srfi private registry)
+(library (srfi private registry)
   (export
     available-features)
   (import 
     (rnrs)
-    (xitomatl srfi private implementation-features))
+    (srfi private implementation-features))
   
   (define srfi-features
     (map 
      (lambda (x)
-       (list `(xitomatl srfi ,(car x)) 
-             (string->symbol (string-append "srfi-" (number->string (cadr x))))))
-     ;  xitomatl name     SRFI code number
-     '([cond-expand             0]
-       [lists                   1]
-       [and-let*                2]
-       [string-ports            6]
-       [receive                 8]
-       [records                 9]
-       [let-values             11]
-       [strings                13]
-       [char-set               14]
-       [case-lambda            16]
-       [time                   19]
-       [error-reporting        23]
-       [cut                    26]
-       [random                 27]
-       [rec                    31]
-       [args-fold              37]
-       [sharing                38]
-       [parameters             39]
-       [streams                41]
-       [eager-comprehensions   42]
-       [vectors                43]
-       [format                 48]
-       [general-cond           61]
-       [compare                67]
-       [lightweight-testing    78])))
+       (define number car)
+       (define mnemonic cdr)
+       (define (make-symbol . args)
+         (string->symbol (apply string-append (map (lambda (a)
+                                                     (if (symbol? a)
+                                                       (symbol->string a)
+                                                       a))
+                                                   args))))
+       (let* ((n-str (number->string (number x)))
+              (colon-n (make-symbol ":" n-str))
+              (srfi-n (make-symbol "srfi-" n-str))
+              (srfi-n-m (apply make-symbol srfi-n (map (lambda (m)
+                                                         (make-symbol "-" m))
+                                                       (mnemonic x)))))
+         ;; The first two are recommended by SRFI-97.
+         ;; The last two are the two types of SRFI-97 library name.
+         (list srfi-n
+               srfi-n-m
+               `(srfi ,colon-n)
+               `(srfi ,colon-n . ,(mnemonic x)))))
+     '((0    cond-expand)
+       (1    lists)
+       (2    and-let*)
+       #;(5    let)
+       (6    basic-string-ports)
+       (8    receive)
+       (9    records)
+       (11   let-values)
+       (13   strings)
+       (14   char-sets)
+       (16   case-lambda)
+       #;(17   generalized-set!)
+       #;(18   multithreading)
+       (19   time)
+       #;(21   real-time-multithreading)
+       (23   error)
+       #;(25   multi-dimensional-arrays)
+       (26   cut)
+       (27   random-bits)
+       #;(28   basic-format-strings)
+       #;(29   localization)
+       (31   rec)
+       (37   args-fold)
+       (38   with-shared-structure)
+       (39   parameters)
+       (41   streams)
+       (41   streams primitive)
+       (41   streams derived)
+       (42   eager-comprehensions)
+       (43   vectors)
+       #;(44   collections)
+       #;(45   lazy)
+       #;(46   syntax-rules)
+       #;(47   arrays)
+       (48   intermediate-format-strings)
+       #;(51   rest-values)
+       #;(54   cat)
+       #;(57   records)
+       #;(59   vicinities)
+       #;(60   integer-bits)
+       (61   cond)
+       #;(63   arrays)
+       #;(64   testing)
+       #;(66   octet-vectors)
+       (67   compare-procedures)
+       #;(69   basic-hash-tables)
+       #;(71   let)
+       #;(74   blobs)
+       (78   lightweight-testing)
+       #;(86   mu-and-nu)
+       #;(87   case)
+       #;(95   sorting-and-merging))))
   
   (define available-features
     (apply append

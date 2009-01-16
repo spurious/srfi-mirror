@@ -23,7 +23,7 @@
 ;;; DEALINGS IN THE SOFTWARE.
 
 #!r6rs
-(library (xitomatl srfi private implementation-features)
+(library (srfi private implementation-features)
   (export
     OS-features
     implementation-features)
@@ -55,7 +55,7 @@
                  (map cdr (filter (lambda (x) (contains? (car x))) 
                                   alist)))])          
       (unless (positive? (length features))
-        (error "(library (xitomatl srfi private implementation-features))"
+        (error "(library (srfi private implementation-features))"
                "Unknown system-type. Please report your's to maintainer person."
                st))
       features))
