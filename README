@@ -41,7 +41,7 @@ These SRFIs are available:
 
 Currently, only Ikarus and Ypsilon can use these libraries.  PLT Scheme has its
 own "srfi" directory which conflicts with having another "srfi" directory.
-Larceny does not (yet?) support the *.IMPL.sls convenction.
+Larceny does not (yet?) support the *.IMPL.sls convention.
   
 For the latest development version, go to:
 
