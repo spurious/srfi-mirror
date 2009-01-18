@@ -91,7 +91,13 @@
                                       (string-append "0." frac-str)))
                               0))]
                      [new-frac
-                      (substring temp-str 0 digits)]
+                      (if (< dot-pos digits)
+                          (string-grow
+                            (substring temp-str 0 dot-pos)
+                            (- digits dot-pos -1)
+                            #\0)
+                          (substring temp-str 0 digits))
+                      ]
                      )
                (string-append
                 (if carry? (number->string (+ 1 (string->number pre-str))) pre-str)

@@ -55,7 +55,7 @@
 
 (expect "        1.23" (format "~12,2F" 1.2345))
 
-(expect "       1.235" (format "~12,3F" 1.2345))
+(expect "       1.234" (format "~12,3F" 1.2345)) ;; "round to even"
 
 (expect "        0.000+1.949i" (format "~20,3F" (sqrt -3.8)))
 
@@ -63,8 +63,9 @@
 
 (expect " 3.46e11" (format "~8,2F" 3.4567e11))
 
-(expect "#0=(a b c . #0#)"
-        (format "~w" (let ( (c (list 'a 'b 'c)) ) (set-cdr! (cddr c) c) c)))
+(check (format "~w" (let ( (c (list 'a 'b 'c)) ) (set-cdr! (cddr c) c) c))
+       (=> member)
+       '("#0=(a b c . #0#)" "#1=(a b c . #1#)"))
 
 (expect "
 "
@@ -166,11 +167,21 @@ def")
   (test '("~10,7f" 3.14159) " 3.1415900")
   (test '("~10,7f" -3.14159) "-3.1415900")
   (test '("~6,3f" 0.0)    " 0.000")
-  (test '("~6,4f" 0.007)  "  7e-3") ;; OK; prefer: "0.0070"
-  (test '("~6,3f" 0.007)  "  7e-3") ;; OK; prefer: " 0.007"
-  (test '("~6,2f" 0.007)  "  7e-3") ;; OK; prefer: "  0.01"
-  (test '("~3,2f" 0.007)  "7e-3")   ;; OK; prefer:  ".01"
-  (test '("~3,2f" -0.007) "-7e-3")  ;; OK; prefer: "-.01"
+  (check (format "~6,4f" 0.007)
+         (=> member)
+         '("  7e-3" "0.0070" ".0070"))
+  (check (format "~6,3f" 0.007)
+         (=> member)
+         '("  7e-3"  " 0.007"))
+  (check (format "~6,2f" 0.007)
+         (=> member)
+         '("  7e-3" "  0.01"))
+  (check (format "~3,2f" 0.007)
+         (=> member)
+         '("7e-3" ".01" "0.01"))
+  (check (format "~3,2f" -0.007)
+          (=> member)
+          '("-7e-3" "-.01" "-0.01"))
   (test '("~6,3f" 12345.6789) "12345.679")
   (test '("~6f" 23.4) "  23.4")
   (test '("~6f" 1234.5) "1234.5")
@@ -184,10 +195,16 @@ def")
   (test '("~1f" 3.141) "3.141")
   (test '("~f" 123.56789) "123.56789")
   (test '("~f" -314.0) "-314.0")
-  (test '("~f" 1e4)       "1e4")       ;; OK; prefer: "10000.0"
-  (test '("~f" -1.23e10)  "-1.23e10")  ;; OK
-  (test '("~f" 1e-4)      "1e-4")      ;; OK; prefer: "0.0001"
-  (test '("~f" -1.23e-10) "-1.23e-10") ;; OK
+  (check (format "~f" 1e4)
+         (=> member)
+         '("1e4" "10000.0"))
+  (check (format "~f" -1.23e10) => "-1.23e10")
+  (check (format "~f" 1e-4)
+         (=> member)
+         '("1e-4" "0.0001" ".0001"))
+  (check (format "~f" -1.23e-10)
+         (=> member)
+         '("-0.000000000123" "-1.23e-10"))
 
 
 (check-report)
