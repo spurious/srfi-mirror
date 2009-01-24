@@ -82,7 +82,7 @@
     (srfi :14 char-sets)
     (srfi :39 parameters)
     (srfi private let-opt)
-    (srfi private include-resolve))
+    (srfi private include))
   
   (define (error . args)
     (parameterize ([ER:error-who 

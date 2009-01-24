@@ -23,12 +23,12 @@
 ;;; DEALINGS IN THE SOFTWARE.
 
 #!r6rs
-(library (srfi private include-resolve)
+(library (srfi private include)
   (export 
     include/resolve)
   (import 
     (rnrs) 
-    (for (srfi private include-resolve compat) expand))
+    (for (srfi private include compat) expand))
   
   (define-syntax include/resolve
     (lambda (stx)

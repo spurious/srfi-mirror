@@ -43,7 +43,7 @@
     (except (rnrs) error)
     (srfi :78 lightweight-testing compat)
     (srfi :39 parameters)
-    (srfi private include-resolve)
+    (srfi private include)
     (prefix (srfi :23 error) ER:)
     (srfi :42 eager-comprehensions))
   

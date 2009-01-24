@@ -60,7 +60,7 @@
     (rnrs mutable-strings)
     (srfi :19 time compat)
     (srfi :6 basic-string-ports)
-    (srfi private include-resolve))
+    (srfi private include))
   
   (define read-line
     (case-lambda

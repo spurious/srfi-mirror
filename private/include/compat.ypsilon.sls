@@ -22,16 +22,13 @@
 ;;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 ;;; DEALINGS IN THE SOFTWARE.
 
-#!r6rs
-(library (srfi private include-resolve compat)
+(library (srfi private include compat)
   (export
     search-paths)
   (import
     (rnrs base)
-    (only (scheme base) current-library-collection-paths path->string)
-    (only (scheme mpair) list->mlist))
+    (only (core) scheme-library-paths))
 
   (define (search-paths)
-    (map path->string 
-         (list->mlist (current-library-collection-paths))))
+    (scheme-library-paths))
 )

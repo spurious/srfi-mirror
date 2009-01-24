@@ -63,7 +63,7 @@
     (prefix (srfi :23 error) ER:)
     (srfi :39 parameters)
     (srfi :8 receive)
-    (srfi private include-resolve))
+    (srfi private include))
   
   (define (error . args)
     (parameterize ([ER:error-who 

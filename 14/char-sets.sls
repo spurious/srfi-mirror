@@ -65,7 +65,7 @@
     (srfi :9 records)
     (srfi :39 parameters)
     (srfi private let-opt)
-    (srfi private include-resolve))
+    (srfi private include))
   
   (define (%latin1->char i)
     (integer->char i))

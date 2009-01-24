@@ -22,19 +22,19 @@
 ;;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 ;;; DEALINGS IN THE SOFTWARE.
 
-(library (srfi private implementation-features)
+(library (srfi private platform-features)
   (export
     OS-features
     implementation-features)
   (import
     (rnrs base))
   
-  (define OS-features
+  (define (OS-features)
     ;;; I couldn't find any facility in the Larceny User's Manual
     ;;; which tells what OS we're running on.
     ;;; Anyone know if Larceny has such a facility?
-    '())
+    (assertion-violation 'OS-features "not implemented"))
   
-  (define implementation-features
+  (define (implementation-features)
     '(larceny))
 )

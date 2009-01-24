@@ -37,7 +37,7 @@
     (rnrs r5rs)
     (srfi :39 parameters)
     (prefix (srfi :23 error) ER:)
-    (srfi private include-resolve))
+    (srfi private include))
   
   (define (error . args)
     (parameterize ([ER:error-who 

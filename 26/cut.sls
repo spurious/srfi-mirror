@@ -25,7 +25,7 @@
 #!r6rs
 (library (srfi :26 cut)
   (export cut cute)
-  (import (rnrs) (srfi private include-resolve))
+  (import (rnrs) (srfi private include))
   
   (include/resolve ("srfi" "26") "cut.scm")  
 )

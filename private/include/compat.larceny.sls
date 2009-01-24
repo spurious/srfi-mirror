@@ -22,7 +22,7 @@
 ;;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 ;;; DEALINGS IN THE SOFTWARE.
 
-(library (srfi private include-resolve compat)
+(library (srfi private include compat)
   (export
     search-paths)
   (import

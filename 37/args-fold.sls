@@ -34,7 +34,7 @@
     option-processor)
   (import 
     (rnrs)
-    (srfi private include-resolve))
+    (srfi private include))
   
   
   (define-record-type option
