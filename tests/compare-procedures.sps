@@ -1,6 +1,6 @@
 #!r6rs
-;;; NOTE: All tests of complex numbers have been commented out,
-;;;       since many complex primitives are missing.
+;; NOTE: All tests of complex numbers have been commented out,
+;;       since many complex primitives are(were?) missing from Ikarus.
 
 (import (rnrs) 
         (rnrs r5rs)

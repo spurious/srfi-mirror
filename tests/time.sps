@@ -217,8 +217,8 @@
 
 
 (define (date->string/all-formats)
-  ; TODO: figure out why ~f isn't working
-  ; TODO: figure out why ~x and ~X aren't doing what the srfi-19 doc says they do
+  ;; TODO: figure out why ~f isn't working
+  ;; TODO: figure out why ~x and ~X aren't doing what the srfi-19 doc says they do
   (define fs
     '("~~" "~a" "~A" "~b" "~B" "~c" "~d" "~D" "~e" #;"~f" "~h" "~H"
       "~I" "~j" "~k" "~l" "~m" "~M" "~n" "~N" "~p" "~r" "~s"
@@ -233,7 +233,7 @@
      (display (date->string cd f)) (newline))
    fs))
 
-;TODO
+;;TODO
 #;(define (string->date/all-formats)
   )
 

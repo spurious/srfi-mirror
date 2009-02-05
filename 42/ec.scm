@@ -4,7 +4,8 @@
 ;
 ; sebastian.egner@philips.com, Eindhoven, The Netherlands, 25-Apr-2005
 ; Scheme R5RS (incl. macros), SRFI-23 (error).
-;;; Modified by Derick Eddington to be able to be included into an R6RS library.
+;
+; Modified by Derick Eddington to be able to be included into an R6RS library.
 ; 
 ; Loading the implementation into Scheme48 0.57:
 ;   ,open srfi-23

@@ -21,7 +21,7 @@
 ; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ; 
 ; -----------------------------------------------------------------------
-;;; Modified by Derick Eddington to be able to be included into an R6RS library.
+; Modified by Derick Eddington to be able to be included into an R6RS library.
 ; 
 ; Lightweight testing (reference implementation)
 ; ==============================================
@@ -256,7 +256,7 @@
      (check-ec (nested q1 q2)    etc ...))))
 
 
-;;; Modified from original: 
-;;; Moved down here because R6RS libraries require expressions after definitions
+;; Modified from original: 
+;; Moved down here because R6RS libraries require expressions after definitions
 (check-set-mode! 'report)
 (check-reset!)
