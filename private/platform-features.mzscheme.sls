@@ -36,11 +36,13 @@
     (OS-id-features
      (string-append (symbol->string (system-type 'os))
                     " " (system-type 'machine))
-     '(("unix" posix)
-       ("linux" linux posix)
+     '(("linux" linux posix)
        ("macosx" mac-os-x darwin posix)
        ("solaris" solaris posix)
        ("gnu" gnu)
+       ("bsd" bsd)
+       ("freebsd" freebsd posix)
+       ("openbsd" openbsd posix)
        ("windows" windows))))
   
   (define (implementation-features)

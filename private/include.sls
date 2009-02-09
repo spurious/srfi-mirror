@@ -60,7 +60,8 @@
                [sp (search-paths)])
            (let loop ([search sp])
              (if (null? search)
-               (error 'include/resolve "cannot find file in search paths" p sp)
+               (error 'include/resolve "cannot find file in search paths"
+                      (substring p 1 (string-length p)) sp)
                (let ([full (string-append (car search) p)])
                  (if (file-exists? full)
                    (include/lexical-context #'ctxt full)

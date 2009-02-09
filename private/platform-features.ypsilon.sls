@@ -37,6 +37,9 @@
      '(("linux" linux posix)
        ("solaris" solaris posix)
        ("darwin" darwin posix)
+       ("bsd" bsd)
+       ("freebsd" freebsd posix)
+       ("openbsd" openbsd posix)
        ("windows" windows))))
   
   (define (implementation-features)

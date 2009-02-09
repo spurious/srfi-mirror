@@ -27,13 +27,21 @@
     OS-features
     implementation-features)
   (import
-    (rnrs base))
+    (rnrs base)
+    (rnrs lists)
+    (primitives system-features)
+    (srfi private OS-id-features))
   
   (define (OS-features)
-    ;; I couldn't find any facility in the Larceny User's Manual
-    ;; which tells what OS we're running on.
-    ;; Anyone know if Larceny has such a facility?
-    (assertion-violation 'OS-features "not implemented"))
+    (OS-id-features
+     (cdr (assq 'os-name (system-features)))
+     '(("linux" linux posix)
+       ("solaris" solaris posix)
+       ("darwin" darwin posix)
+       ("bsd" bsd)
+       ("freebsd" freebsd posix)
+       ("openbsd" openbsd posix)
+       ("windows" windows))))
   
   (define (implementation-features)
     '(larceny))
