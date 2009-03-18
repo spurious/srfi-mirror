@@ -43,6 +43,8 @@
     (srfi :48 intermediate-format-strings compat)
     (srfi :6 basic-string-ports)
     (srfi :38 with-shared-structure))
+  
+  (define ascii-tab #\tab)
     
   (define (format arg0 . arg*)
     

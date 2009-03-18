@@ -25,11 +25,7 @@
 #!r6rs
 (library (srfi :48 intermediate-format-strings compat)
   (export
-    pretty-print
-    ascii-tab)
+    pretty-print)
   (import
-    (rnrs base)
     (only (scheme pretty) pretty-print))
-  
-  (define ascii-tab #\tab)
 )
