@@ -38,10 +38,11 @@ These SRFIs are available:
   (srfi :61 cond)
   (srfi :67 compare-procedures)
   (srfi :78 lightweight-testing)
+  (srfi :99 records)
 
-Currently, only Ikarus and Ypsilon can use these libraries.  PLT Scheme has its
-own "srfi" directory which conflicts with having another "srfi" directory.
-Larceny does not (yet?) support the *.IMPL.sls convention.
+Currently supported systems are: Ikarus, Larceny, and Ypsilon.  PLT Scheme is
+not supported because it has its own "srfi" directory which conflicts with
+having another "srfi" directory.
   
 For the latest development version, go to:
 
