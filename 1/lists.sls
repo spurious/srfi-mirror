@@ -23,7 +23,7 @@
 (library (srfi :1 lists)
   (export
     ;;; Exported:
-    xcons tree-copy make-list list-tabulate cons* list-copy 
+    xcons #;tree-copy make-list list-tabulate list-copy 
     proper-list? circular-list? dotted-list? not-pair? null-list? list=
     circular-list length+
     iota
@@ -38,11 +38,10 @@
     count
     append! append-reverse append-reverse! concatenate concatenate! 
     unfold       fold       pair-fold       reduce
-    unfold-right fold-right pair-fold-right reduce-right
+    unfold-right            pair-fold-right reduce-right
     append-map append-map! map! pair-for-each filter-map map-in-order
-    filter  partition  remove
     filter! partition! remove! 
-    find find-tail any every list-index
+    find-tail any every list-index
     take-while drop-while take-while!
     span break span! break!
     delete delete!
@@ -54,11 +53,21 @@
     lset-union  lset-intersection  lset-difference  lset-xor  
     lset-diff+intersection
     lset-union! lset-intersection! lset-difference! lset-xor!
-    lset-diff+intersection!)
+    lset-diff+intersection!
+    ;; re-exported:
+    append assq assv caaaar caaadr caaar caadar caaddr
+    caadr caar cadaar cadadr cadar caddar cadddr caddr cadr
+    car cdaaar cdaadr cdaar cdadar cdaddr cdadr cdar cddaar
+    cddadr cddar cdddar cddddr cdddr cddr cdr cons
+    length list list-ref memq memv null? pair?
+    reverse set-car! set-cdr!
+    ;; different than R6RS:
+    assoc cons* filter find fold-right for-each map member partition remove)
   (import 
-    (except (rnrs) map member assoc)
-    (rnrs mutable-pairs)
-    (srfi :1 lists compat))
+    (except (rnrs)
+            assoc cons* error filter find fold-right
+            for-each map member partition remove)
+    (rnrs mutable-pairs))
 
 ;;; 
 ;;; In principle, the following R4RS list- and pair-processing procedures
@@ -175,7 +184,7 @@
         [(_ pred val caller)
          (and (identifier? #'val) (identifier? #'caller))
          #'(unless (pred val)
-             (error 'caller "check-arg failed" val))])))
+             (assertion-violation 'caller "check-arg failed" val))])))
 
 ;;;   A few uses of the LET-OPTIONAL and :OPTIONAL macros for parsing
 ;;;     optional arguments.
@@ -230,7 +239,12 @@
 ;;;
 ;;; The SRFI discussion record contains more discussion on this topic.
 
-
+(define (error . args)
+  (if (and (<= 2 (length args)) (symbol? (car args)) (string? (cadr args)))
+    (apply assertion-violation args)
+    (apply assertion-violation "(library (srfi :1 lists))"
+           "misuse of error procedure" args)))
+  
 ;;; Constructors
 ;;;;;;;;;;;;;;;;
 
@@ -239,24 +253,23 @@
 (define (xcons d a) (cons a d))
 
 ;;;; Recursively copy every cons.
-(define (tree-copy x)
-  (let recur ((x x))
-    (if (not (pair? x)) x
-	(cons (recur (car x)) (recur (cdr x))))))
+;(define (tree-copy x)
+;  (let recur ((x x))
+;    (if (not (pair? x)) x
+;	(cons (recur (car x)) (recur (cdr x))))))
 
 ;;; Make a list of length LEN.
 
-;;; Already in (srfi :1 lists compat).
-;;; (define (make-list len . maybe-elt)
-;;;   (check-arg (lambda (n) (and (integer? n) (>= n 0))) len make-list)
-;;;   (let ((elt (cond ((null? maybe-elt) #f) ; Default value
-;;; 		   ((null? (cdr maybe-elt)) (car maybe-elt))
-;;; 		   (else (error "Too many arguments to MAKE-LIST"
-;;; 				(cons len maybe-elt))))))
-;;;     (do ((i len (- i 1))
-;;; 	 (ans '() (cons elt ans)))
-;;; 	((<= i 0) ans))))
-;;; 
+(define (make-list len . maybe-elt)
+  (check-arg (lambda (n) (and (integer? n) (>= n 0))) len make-list)
+  (let ((elt (cond ((null? maybe-elt) #f) ; Default value
+		   ((null? (cdr maybe-elt)) (car maybe-elt))
+		   (else (error 'make-list "Too many arguments"
+				(cons len maybe-elt))))))
+    (do ((i len (- i 1))
+	 (ans '() (cons elt ans)))
+	((<= i 0) ans))))
+
 
 ;(define (list . ans) ans)	; R4RS
 
@@ -275,12 +288,11 @@
 ;;;
 ;;; (cons first (unfold not-pair? car cdr rest values))
 
-; Already in R6RS
-;(define (cons* first . rest)
-;  (let recur ((x first) (rest rest))
-;    (if (pair? rest)
-;	(cons x (recur (car rest) (cdr rest)))
-;	x)))
+(define (cons* first . rest)
+  (let recur ((x first) (rest rest))
+    (if (pair? rest)
+       (cons x (recur (car rest) (cdr rest)))
+       x)))
 
 ;;; (unfold not-pair? car cdr lis values)
 
@@ -428,21 +440,20 @@
 	(else (error 'null-list? "argument out of domain" l))))
            
 
-(define (list= = . lists)
+(define (list= elt= . lists)
   (or (null? lists) ; special case
-
       (let lp1 ((list-a (car lists)) (others (cdr lists)))
 	(or (null? others)
-	    (let ((list-b (car others))
-		  (others (cdr others)))
-	      (if (eq? list-a list-b)	; EQ? => LIST=
-		  (lp1 list-b others)
-		  (let lp2 ((list-a list-a) (list-b list-b))
+	    (let ((list-b-orig (car others))
+		  (others      (cdr others)))
+	      (if (eq? list-a list-b-orig)	; EQ? => LIST=
+		  (lp1 list-b-orig others)
+		  (let lp2 ((list-a list-a) (list-b list-b-orig))
 		    (if (null-list? list-a)
 			(and (null-list? list-b)
-			     (lp1 list-b others))
+			     (lp1 list-b-orig others))
 			(and (not (null-list? list-b))
-			     (= (car list-a) (car list-b))
+			     (elt= (car list-a) (car list-b))
 			     (lp2 (cdr list-a) (cdr list-b)))))))))))
 			
 
@@ -640,12 +651,11 @@
 
 (define (last lis) (car (last-pair lis)))
 
-;;; Already in (srfi :1 lists compat).
-;;;(define (last-pair lis)
-;;;  (check-arg pair? lis last-pair)
-;;;  (let lp ((lis lis))
-;;;    (let ((tail (cdr lis)))
-;;;      (if (pair? tail) (lp tail) lis))))
+(define (last-pair lis)
+  (check-arg pair? lis last-pair)
+  (let lp ((lis lis))
+    (let ((tail (cdr lis)))
+      (if (pair? tail) (lp tail) lis))))
 
 
 ;;; Unzippers -- 1 through 5
@@ -769,19 +779,7 @@
 
 ;;; Return (map cdr lists). 
 ;;; However, if any element of LISTS is empty, just abort and return '().
-
-;(define (%cdrs lists)
-;  (let f ([ls lists] [ac '()])
-;    (cond
-;      [(pair? ls)
-;       (let ([a (car ls)])
-;         (if (null? a) 
-;             '()
-;             (f (cdr ls) (cons a ac))))]
-;      [else (reverse ac)])))
-
 (define (%cdrs lists)
-  (error '%cdrs "reached")
   (call-with-current-continuation
     (lambda (abort)
       (let recur ((lists lists))
@@ -791,9 +789,9 @@
 		  (cons (cdr lis) (recur (cdr lists)))))
 	    '())))))
 
-;(define (%cars+ lists last-elt)	; (append! (map car lists) (list last-elt))
-;  (let recur ((lists lists))
-;    (if (pair? lists) (cons (caar lists) (recur (cdr lists))) (list last-elt))))
+(define (%cars+ lists last-elt)	; (append! (map car lists) (list last-elt))
+  (let recur ((lists lists))
+    (if (pair? lists) (cons (caar lists) (recur (cdr lists))) (list last-elt))))
 
 ;;; LISTS is a (not very long) non-empty list of lists.
 ;;; Return two lists: the cars & the cdrs of the lists.
@@ -823,7 +821,6 @@
 ;;; Like %CARS+CDRS, but we pass in a final elt tacked onto the end of the
 ;;; cars list. What a hack.
 (define (%cars+cdrs+ lists cars-final)
-  (error 'cars+cdrs+ "reached")
   (call-with-current-continuation
     (lambda (abort)
       (let recur ((lists lists))
@@ -914,19 +911,19 @@
 	(if (null-list? lis) ans
 	    (lp (cdr lis) (kons (car lis) ans))))))
 
-; Already in R6RS
-;(define (fold-right kons knil lis1 . lists)
-;  (check-arg procedure? kons fold-right)
-;  (if (pair? lists)
-;      (let recur ((lists (cons lis1 lists)))		; N-ary case
-;	(let ((cdrs (%cdrs lists)))
-;	  (if (null? cdrs) knil
-;	      (apply kons (%cars+ lists (recur cdrs))))))
-;
-;      (let recur ((lis lis1))				; Fast path
-;	(if (null-list? lis) knil
-;	    (let ((head (car lis)))
-;	      (kons head (recur (cdr lis))))))))
+
+(define (fold-right kons knil lis1 . lists)
+  (check-arg procedure? kons fold-right)
+  (if (pair? lists)
+      (let recur ((lists (cons lis1 lists)))		; N-ary case
+	(let ((cdrs (%cdrs lists)))
+	  (if (null? cdrs) knil
+	      (apply kons (%cars+ lists (recur cdrs))))))
+
+      (let recur ((lis lis1))				; Fast path
+	(if (null-list? lis) knil
+	    (let ((head (car lis)))
+	      (kons head (recur (cdr lis))))))))
 
 
 (define (pair-fold-right f zero lis1 . lists)
@@ -1076,6 +1073,23 @@
 ;;; We extend MAP to handle arguments of unequal length.
 (define map map-in-order)	
 
+;;; Contributed by Michael Sperber since it was missing from the
+;;; reference implementation.
+(define (for-each f lis1 . lists)
+  (if (pair? lists)
+      (let recur ((lists (cons lis1 lists)))
+	(receive (cars cdrs) (%cars+cdrs lists)
+		 (if (pair? cars)
+		     (begin
+		       (apply f cars)	; Do head first,
+		       (recur cdrs)))))	; then tail.
+    
+      ;; Fast path.
+      (let recur ((lis lis1))
+	(if (not (null-list? lis))
+	    (begin
+	      (f (car lis))		; Do head first,
+	      (recur (cdr lis)))))))	; then tail.
 
 ;;; filter, remove, partition
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1085,18 +1099,17 @@
 ;; This FILTER shares the longest tail of L that has no deleted elements.
 ;; If Scheme had multi-continuation calls, they could be made more efficient.
 
-; Already in R6RS
-;(define (filter pred lis)			; Sleazing with EQ? makes this
-;  (check-arg procedure? pred filter)		; one faster.
-;  (let recur ((lis lis))		
-;    (if (null-list? lis) lis			; Use NOT-PAIR? to handle dotted lists.
-;	(let ((head (car lis))
-;	      (tail (cdr lis)))
-;	  (if (pred head)
-;	      (let ((new-tail (recur tail)))	; Replicate the RECUR call so
-;		(if (eq? tail new-tail) lis
-;		    (cons head new-tail)))
-;	      (recur tail))))))			; this one can be a tail call.
+(define (filter pred lis)			; Sleazing with EQ? makes this
+  (check-arg procedure? pred filter)		; one faster.
+  (let recur ((lis lis))		
+    (if (null-list? lis) lis			; Use NOT-PAIR? to handle dotted lists.
+	(let ((head (car lis))
+	      (tail (cdr lis)))
+	  (if (pred head)
+	      (let ((new-tail (recur tail)))	; Replicate the RECUR call so
+		(if (eq? tail new-tail) lis
+		    (cons head new-tail)))
+	      (recur tail))))))			; this one can be a tail call.
 
 
 ;;; Another version that shares longest tail.
@@ -1175,17 +1188,16 @@
 ;;; Answers share common tail with LIS where possible; 
 ;;; the technique is slightly subtle.
 
-; Already in R6RS
-;(define (partition pred lis)
-;  (check-arg procedure? pred partition)
-;  (let recur ((lis lis))
-;    (if (null-list? lis) (values lis lis)	; Use NOT-PAIR? to handle dotted lists.
-;	(let ((elt (car lis))
-;	      (tail (cdr lis)))
-;	  (receive (in out) (recur tail)
-;	    (if (pred elt)
-;		(values (if (pair? out) (cons elt in) lis) out)
-;		(values in (if (pair? in) (cons elt out) lis))))))))
+(define (partition pred lis)
+  (check-arg procedure? pred partition)
+  (let recur ((lis lis))
+    (if (null-list? lis) (values lis lis)	; Use NOT-PAIR? to handle dotted lists.
+	(let ((elt (car lis))
+	      (tail (cdr lis)))
+	  (receive (in out) (recur tail)
+	    (if (pred elt)
+		(values (if (pair? out) (cons elt in) lis) out)
+		(values in (if (pair? in) (cons elt out) lis))))))))
 
 
 
@@ -1255,8 +1267,7 @@
 
 
 ;;; Inline us, please.
-; Already in R6RS
-;(define (remove  pred l) (filter  (lambda (x) (not (pred x))) l))
+(define (remove  pred l) (filter  (lambda (x) (not (pred x))) l))
 (define (remove! pred l) (filter! (lambda (x) (not (pred x))) l))
 
 
@@ -1337,10 +1348,12 @@
      (check-arg procedure? elt= delete-duplicates!)
      (let recur ((lis lis))
        (if (null-list? lis) lis
-         (let* ((x (car lis))
-                (tail (cdr lis))
-                (new-tail (recur (delete! x tail elt=))))
-           (if (eq? tail new-tail) lis (cons x new-tail)))))]))
+           (let* ((x (car lis))
+                  (tail (cdr lis))
+                  (new-tail (recur (delete! x tail elt=))))
+             (when (not (eq? tail new-tail))
+               (set-cdr! lis new-tail))
+             lis)))]))
 
 
 ;;; alist stuff
@@ -1378,10 +1391,9 @@
 ;;; find find-tail take-while drop-while span break any every list-index
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Already in R6RS
-;(define (find pred list)
-;  (cond ((find-tail pred list) => car)
-;	(else #f)))
+(define (find pred list)
+  (cond ((find-tail pred list) => car)
+	(else #f)))
 
 (define (find-tail pred list)
   (check-arg procedure? pred find-tail)
