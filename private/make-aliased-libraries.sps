@@ -39,12 +39,16 @@
                               (environment-symbols (environment lib-name))))
           (alias-name `(srfi ,(string->symbol (format ":~d" srfi-num))))
           (out-file (format "~d.sls" srfi-num)))
-     (call-with-output-file out-file
-       (lambda (fop)
-         (fprintf fop alias-template
-                  program-name
-                  alias-name
-                  (string-intersperse (map symbol->string exports) "\n    ")
-                  lib-name)))
-     (printf "~a\n" out-file)))
+     (cond
+       ((file-exists? out-file)
+        (printf "Skipping ~a because it already exists.\n" out-file))
+       (else
+        (call-with-output-file out-file
+          (lambda (fop)
+            (fprintf fop alias-template
+                     program-name
+                     alias-name
+                     (string-intersperse (map symbol->string exports) "\n    ")
+                     lib-name)))
+        (printf "~a\n" out-file)))))
  srfi-libraries/mnemonics)

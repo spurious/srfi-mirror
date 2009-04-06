@@ -77,7 +77,7 @@
                 #;(60   integer-bits)
                 (61   cond)
                 #;(63   arrays)
-                #;(64   testing)
+                (64   testing)
                 #;(66   octet-vectors)
                 (67   compare-procedures)
                 #;(69   basic-hash-tables)
