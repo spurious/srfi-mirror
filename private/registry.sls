@@ -87,6 +87,7 @@
                 #;(86   mu-and-nu)
                 #;(87   case)
                 #;(95   sorting-and-merging)
+                (98   os-environment-variables)
                 (99   records)
                 (99   records procedural)
                 (99   records inspection)

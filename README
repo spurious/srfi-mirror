@@ -36,8 +36,10 @@ These SRFIs are available:
   (srfi :43 vectors)
   (srfi :48 intermediate-format-strings)
   (srfi :61 cond)
+  (srfi :64 testing)
   (srfi :67 compare-procedures)
   (srfi :78 lightweight-testing)
+  (srfi :98 os-environment-variables)
   (srfi :99 records)
 
 Currently supported systems are: Ikarus, Larceny, and Ypsilon.  PLT Scheme is

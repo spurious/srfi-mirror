@@ -59,6 +59,8 @@
   (only (srfi :8 receive))
   (only (srfi :9))
   (only (srfi :9 records))
+  (only (srfi :98))
+  (only (srfi :98 os-environment-variables))
   (only (srfi :99))
   (only (srfi :99 records))
   (only (srfi :99 records helper))
