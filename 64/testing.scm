@@ -161,6 +161,7 @@
 )
 
 (define (test-runner-reset runner)
+    (test-result-alist! runner '())
     (test-runner-pass-count! runner 0)
     (test-runner-fail-count! runner 0)
     (test-runner-xpass-count! runner 0)
