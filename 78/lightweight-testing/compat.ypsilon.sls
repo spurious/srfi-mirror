@@ -24,7 +24,15 @@
 
 (library (srfi :78 lightweight-testing compat)
   (export
-    (rename (pretty-print pretty-print/no-trailing-newline)))
+    check:write)
   (import
+    (rnrs)
     (only (core) pretty-print))
+
+  (define check:write
+    (case-lambda
+      ((x) (check:write x (current-output-port)))
+      ((x p)
+       (pretty-print x p)
+       (newline p))))
 )

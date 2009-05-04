@@ -53,6 +53,4 @@
       (apply ER:error args)))
   
   (include/resolve ("srfi" "78") "check.scm")
-  
-  (set! check:write pretty-print/no-trailing-newline)  
 )
