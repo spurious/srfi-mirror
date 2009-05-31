@@ -29,7 +29,7 @@
                 (let loop ([a '()])
                   (let ([x (read fip)])
                     (if (eof-object? x)
-                      (datum->syntax ctxt `(begin . ,(reverse a)))
+                      (cons #'begin (datum->syntax ctxt (reverse a)))
                       (loop (cons x a))))))))))
       (syntax-case stx ()
         [(ctxt (lib-path* ...) file-path)
