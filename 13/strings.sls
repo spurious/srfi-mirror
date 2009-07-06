@@ -54,21 +54,16 @@
     substring-spec-ok?)
     )
   (import
-    (except (rnrs) error string-copy string-for-each string->list
+    (except (rnrs) string-copy string-for-each string->list
                    string-upcase string-downcase string-titlecase string-hash)
     (except (rnrs mutable-strings) string-fill!)
     (rnrs r5rs)
-    (prefix (srfi :23 error) ER:)
+    (srfi :23 error tricks)
     (srfi :8 receive)
     (srfi :14 char-sets)
-    (srfi :39 parameters)
     (srfi private let-opt)
     (srfi private include))
   
-  (define (error . args)
-    (parameterize ([ER:error-who 
-                    "(library (srfi :13 strings))"])
-      (apply ER:error args)))
   
   (define-syntax check-arg
     (lambda (stx)
@@ -76,11 +71,11 @@
         [(_ pred val caller)
          (and (identifier? #'val) (identifier? #'caller))
          #'(unless (pred val)
-             (parameterize ([ER:error-who 'caller])
-               (ER:error "check-arg failed" val)))])))
+             (assertion-violation 'caller "check-arg failed" val))])))
   
   (define (char-cased? c)
     (char-upper-case? (char-upcase c)))
   
-  (include/resolve ("srfi" "13") "srfi-13.scm")
+  (SRFI-23-error->R6RS "(library (srfi :13 strings))"
+   (include/resolve ("srfi" "13") "srfi-13.scm"))
 )

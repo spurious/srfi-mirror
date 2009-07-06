@@ -39,12 +39,11 @@
     char-set:empty       char-set:full
     )
   (import
-    (except (rnrs) error define-record-type)
+    (except (rnrs) define-record-type)
     (rnrs mutable-strings)
     (rnrs r5rs)
-    (prefix (srfi :23 error) ER:)
+    (srfi :23 error tricks)
     (srfi :9 records)
-    (srfi :39 parameters)
     (srfi private let-opt)
     (srfi private include))
   
@@ -53,20 +52,15 @@
   
   (define (%char->latin1 c)
     (char->integer c))
-  
-  (define (error . args)
-    (parameterize ([ER:error-who 
-                    "(library (srfi :14 char-sets))"])
-      (apply ER:error args)))
-    
+      
   (define-syntax check-arg
     (lambda (stx)
       (syntax-case stx ()
         [(_ pred val caller)
          (identifier? #'val)
          #'(unless (pred val)
-             (parameterize ([ER:error-who caller])
-               (ER:error "check-arg failed" val)))])))
+             (assertion-violation caller "check-arg failed" val))])))
   
-  (include/resolve ("srfi" "14") "srfi-14.scm")
+  (SRFI-23-error->R6RS "(library (srfi :14 char-sets))"
+   (include/resolve ("srfi" "14") "srfi-14.scm"))
 )

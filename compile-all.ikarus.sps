@@ -20,6 +20,7 @@
   (only (srfi :2 and-let*))
   (only (srfi :23))
   (only (srfi :23 error))
+  (only (srfi :23 error tricks))
   (only (srfi :26))
   (only (srfi :26 cut))
   (only (srfi :27))

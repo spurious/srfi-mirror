@@ -14,16 +14,12 @@
     :-dispatch-ref :-dispatch-set! make-initial-:-dispatch 
     dispatch-union :generator-proc)
   (import
-    (except (rnrs) error)
+    (rnrs)
     (rnrs r5rs)
     (srfi :39 parameters)
-    (prefix (srfi :23 error) ER:)
+    (srfi :23 error tricks)
     (srfi private include))
   
-  (define (error . args)
-    (parameterize ([ER:error-who 
-                    "(library (srfi :42 eager-comprehensions))"])
-      (apply ER:error args)))
-  
-  (include/resolve ("srfi" "42") "ec.scm")  
+  (SRFI-23-error->R6RS "(library (srfi :42 eager-comprehensions))"
+   (include/resolve ("srfi" "42") "ec.scm"))  
 )

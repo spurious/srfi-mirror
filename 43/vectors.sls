@@ -37,20 +37,14 @@
     vector->list          reverse-vector->list
     list->vector          reverse-list->vector )
   (import
-    (except (rnrs) error vector-map vector-for-each vector-fill! vector->list
+    (except (rnrs) vector-map vector-for-each vector-fill! vector->list
                    list->vector)
     (prefix (only (rnrs) vector-fill! vector->list list->vector) rnrs:)
     (rnrs r5rs)
-    (prefix (srfi :23 error) ER:)
-    (srfi :39 parameters)
+    (srfi :23 error tricks)
     (srfi :8 receive)
     (srfi private include))
-  
-  (define (error . args)
-    (parameterize ([ER:error-who 
-                    "(library (srfi :43 vectors))"])
-      (apply ER:error args)))
-  
+    
   (define-syntax check-type
     (lambda (stx)
       (syntax-case stx ()
@@ -58,13 +52,12 @@
          (if (identifier? #'value)
            #'(if (pred? value)
                value
-               (parameterize ([ER:error-who callee])
-                 (ER:error "erroneous value" value)))
+               (assertion-violation callee "erroneous value" value))
            #'(let ([v value])
                (if (pred? v)
                  v
-                 (parameterize ([ER:error-who callee])
-                   (ER:error "erroneous value" v)))))])))
+                 (assertion-violation callee "erroneous value" v))))])))
     
-  (include/resolve ("srfi" "43") "vector-lib.scm")
+  (SRFI-23-error->R6RS "(library (srfi :43 vectors))"
+   (include/resolve ("srfi" "43") "vector-lib.scm"))
 )

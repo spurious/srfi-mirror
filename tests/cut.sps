@@ -22,16 +22,13 @@
 ;; Extended by Derick Eddington to test free-identifier=? of <> and <...>.
 
 (import
-  (except (rnrs) error)
-  (rnrs eval)
-  (srfi :23 error)
-  (srfi :39 parameters))
+  (rnrs)
+  (rnrs eval))
 
 (define (check expr)
   (if (not (eq? (eval expr (environment '(rnrs) '(srfi :26 cut)))
                 #t))
-      (parameterize ([error-who 'check])
-        (error "check failed" expr))))
+      (assertion-violation 'check "check failed" expr)))
 
 ; (check-all)
 ;    runs several tests on cut and reports.

@@ -41,7 +41,7 @@
     test-on-bad-count-simple test-on-bad-end-name-simple
     test-on-final-simple test-on-test-end-simple)
   (import
-    (except (rnrs base) error)
+    (rnrs base)
     (rnrs control)
     (rnrs exceptions)
     (rnrs io simple)
@@ -53,10 +53,8 @@
     (srfi :6 basic-string-ports)
     (srfi :9 records)
     (srfi :39 parameters)
+    (srfi :23 error tricks)
     (srfi private include))
-
-  (define (error msg)
-    (assertion-violation "(library (srfi :64 testing))" msg))
 
   (define (eval form)
     (rnrs:eval form (environment '(rnrs)
@@ -70,5 +68,6 @@
       (() test-log-to-file)
       ((val) (set! test-log-to-file val))))
   
-  (include/resolve ("srfi" "64") "testing.scm")
+  (SRFI-23-error->R6RS "(library (srfi :64 testing))"
+   (include/resolve ("srfi" "64") "testing.scm"))
 )
