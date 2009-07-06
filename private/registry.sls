@@ -32,7 +32,7 @@
                 (19   time)
                 #;(21   real-time-multithreading)
                 (23   error)
-                #;(25   multi-dimensional-arrays)
+                (25   multi-dimensional-arrays)
                 (26   cut)
                 (27   random-bits)
                 #;(28   basic-format-strings)

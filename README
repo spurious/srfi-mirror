@@ -25,6 +25,7 @@ These SRFIs are available:
   (srfi :16 case-lambda)
   (srfi :19 time)
   (srfi :23 error)
+  (srfi :25 multi-dimensional-arrays)
   (srfi :26 cut)
   (srfi :27 random-bits)
   (srfi :31 rec)
