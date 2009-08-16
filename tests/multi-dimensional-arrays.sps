@@ -18,6 +18,6 @@
              (past
               (syntax-rules ()
                 ((_ . r) (begin)))))
-  (include/resolve ("srfi" "25") "test.scm"))
+  (include/resolve ("srfi" "%3a25") "test.scm"))
 
 (check-report)
