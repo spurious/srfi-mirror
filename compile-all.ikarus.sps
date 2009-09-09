@@ -80,4 +80,5 @@
   (only (srfi private let-opt))
   (only (srfi private platform-features))
   (only (srfi private registry))
+  (only (srfi private vanish))
 )
