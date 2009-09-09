@@ -399,8 +399,7 @@
              (quotient nanoseconds tm:nano)))
 
 (define (tm:nanoseconds->values nanoseconds)
-  (values (abs (remainder nanoseconds tm:nano))
-          (quotient nanoseconds tm:nano)))
+  (div-and-mod nanoseconds tm:nano))
 
 (define (tm:time-difference time1 time2 time3)
   (if (or (not (and (time? time1) (time? time2)))
@@ -412,7 +411,7 @@
 	(time-second-set! time3 0)
 	(time-nanosecond-set! time3 0))
       (receive 
-       (nanos secs)
+       (secs nanos)
        (tm:nanoseconds->values (- (tm:time->nanoseconds time1)
                                   (tm:time->nanoseconds time2)))
        (time-second-set! time3 secs)
