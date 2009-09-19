@@ -75,6 +75,7 @@
   (only (srfi :99 records procedural))
   (only (srfi :99 records syntactic))
   (only (srfi private OS-id-features))
+  (only (srfi private feature-cond))
   (only (srfi private include))
   (only (srfi private include compat))
   (only (srfi private let-opt))

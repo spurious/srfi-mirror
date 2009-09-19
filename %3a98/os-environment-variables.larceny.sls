@@ -17,7 +17,7 @@
     (primitives
      foreign-procedure #;foreign-variable foreign-null-pointer? sizeof:pointer
      %peek-pointer %peek8u void*->address ffi/dlopen ffi/dlsym)
-    (srfi :0 cond-expand))
+    (srfi private feature-cond))
 
   ;; TODO: Will the convenient string converters use the native transcoder in
   ;;       the future?  So that scheme-str->c-str-bv and c-str-ptr->scheme-str
@@ -56,7 +56,7 @@
 
   ;; TODO: Is (ffi/dlopen "") okay?  It works for me on Ubuntu Linux 8.10.
   (define environ
-    (cond-expand
+    (feature-cond
      (linux
       (%peek-pointer (ffi/dlsym (ffi/dlopen "") "environ")))))
 
