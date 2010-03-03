@@ -1,9 +1,7 @@
-;; Copyright (c) 2009 Derick Eddington.  All rights reserved.  Licensed under an
-;; MIT-style license.  My license is in the file named LICENSE from the original
-;; collection this file is distributed with.  If this file is redistributed with
-;; some other collection, my license must also be included.
-
 #!r6rs
+;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
+;; LICENSE from the original collection this file is distributed with.
+
 (library (srfi :14 char-sets)
   (export
     ; Predicates & comparison
@@ -56,10 +54,10 @@
   (define-syntax check-arg
     (lambda (stx)
       (syntax-case stx ()
-        [(_ pred val caller)
+        ((_ pred val caller)
          (identifier? #'val)
          #'(unless (pred val)
-             (assertion-violation caller "check-arg failed" val))])))
+             (assertion-violation caller "check-arg failed" val))))))
   
   (SRFI-23-error->R6RS "(library (srfi :14 char-sets))"
    (include/resolve ("srfi" "%3a14") "srfi-14.scm"))

@@ -1,3 +1,4 @@
+#!r6rs
 (library (srfi :99 records)
   (export
    make-rtd rtd? rtd-constructor rtd-predicate rtd-accessor rtd-mutator

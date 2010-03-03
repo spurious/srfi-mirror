@@ -1,3 +1,4 @@
+#!r6rs
 (library (srfi :98 os-environment-variables)
   (export
     (rename (lookup-process-environment get-environment-variable)

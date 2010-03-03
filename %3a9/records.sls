@@ -1,9 +1,7 @@
-;; Copyright (c) 2009 Derick Eddington.  All rights reserved.  Licensed under an
-;; MIT-style license.  My license is in the file named LICENSE from the original
-;; collection this file is distributed with.  If this file is redistributed with
-;; some other collection, my license must also be included.
-
 #!r6rs
+;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
+;; LICENSE from the original collection this file is distributed with.
+
 (library (srfi :9 records)
   (export 
     (rename (srfi:define-record-type define-record-type)))
@@ -13,7 +11,7 @@
   (define-syntax srfi:define-record-type
     (lambda (stx)
       (syntax-case stx ()
-        [(_ type (constructor constructor-tag ...)
+        ((_ type (constructor constructor-tag ...)
                  predicate
                  (field-tag accessor setter ...) ...)         
          (and (for-all identifier? 
@@ -27,24 +25,24 @@
                          (memp (lambda (ft) (bound-identifier=? ct ft))
                                #'(field-tag ...)))
                        #'(constructor-tag ...)))         
-         (with-syntax ([(field-clause ...)
+         (with-syntax (((field-clause ...)
                         (map (lambda (clause)
                                (if (= 2 (length clause)) 
                                  #`(immutable . #,clause) 
                                  #`(mutable . #,clause)))
-                             #'((field-tag accessor setter ...) ...))]
-                       [(unspec-tag ...)
+                             #'((field-tag accessor setter ...) ...)))
+                       ((unspec-tag ...)
                         (remp (lambda (ft) 
                                 (memp (lambda (ct) (bound-identifier=? ft ct))
                                       #'(constructor-tag ...)))
-                              #'(field-tag ...))])
+                              #'(field-tag ...))))
            #'(define-record-type (type constructor predicate)
-               (sealed #t)
+               (sealed #T)
                (protocol (lambda (ctor)
                            (lambda (constructor-tag ...)
                              (define unspec-tag)
                              ...
                              (ctor field-tag ...))))
-               (fields field-clause ...)))])))
+               (fields field-clause ...)))))))
   
 )

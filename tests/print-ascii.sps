@@ -1,4 +1,4 @@
-
+#!r6rs
 ;;; Test format import of implementation
 ;;; specific routine: pretty-print
 

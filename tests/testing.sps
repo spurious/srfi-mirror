@@ -1,9 +1,9 @@
+#!r6rs
 ;;;
 ;;;  This is a test suite written in the notation of 
 ;;;  SRFI-64, A Scheme API for test suites
 ;;;
 
-#!r6rs
 (import
   (except (rnrs base) error)
   (rnrs lists)

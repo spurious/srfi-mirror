@@ -1,3 +1,4 @@
+#!r6rs
 ; Test suite for SRFI 43
 ;
 ; $Id: srfi-43-test.sps 6152 2009-03-19 22:30:05Z will $

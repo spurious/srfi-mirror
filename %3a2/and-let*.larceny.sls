@@ -1,9 +1,7 @@
-;; Copyright (c) 2009 Derick Eddington.  All rights reserved.  Licensed under an
-;; MIT-style license.  My license is in the file named LICENSE from the original
-;; collection this file is distributed with.  If this file is redistributed with
-;; some other collection, my license must also be included.
-
 #!r6rs
+;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
+;; LICENSE from the original collection this file is distributed with.
+
 (library (srfi :2 and-let*)  
   (export 
     and-let*)
@@ -13,33 +11,33 @@
   (define-syntax and-let*
     (lambda (stx)
       (define (get-id c)
-        (syntax-case c () [(var expr) #'var] [_ #f]))
+        (syntax-case c () ((var expr) #'var) (_ #F)))
       (syntax-case stx ()
-        [(_ (clause* ...) body* ...)
+        ((_ (clause* ...) body* ...)
          (for-all identifier? (filter values (map get-id #'(clause* ...))))
-         #'(and-let*-core #t (clause* ...) body* ...)])))
+         #'(and-let*-core #T (clause* ...) body* ...)))))
   
   (define-syntax and-let*-core
     (lambda (stx)
       (syntax-case stx ()
-        [(kw _ ([var expr] clause* ...) body* ...)
-         #'(let ([var expr])
+        ((kw _ ((var expr) clause* ...) body* ...)
+         #'(let ((var expr))
              (if var
                (kw var (clause* ...) body* ...)
-               #f))]
-        [(kw _ ([expr] clause* ...) body* ...)
-         #'(let ([t expr])
+               #F)))
+        ((kw _ ((expr) clause* ...) body* ...)
+         #'(let ((t expr))
              (if t
                (kw t (clause* ...) body* ...)
-               #f))]
-        [(kw _ (id clause* ...) body* ...)
+               #F)))
+        ((kw _ (id clause* ...) body* ...)
          (or (identifier? #'id)
-             (syntax-violation #f "invalid clause" stx #'id))
+             (syntax-violation #F "invalid clause" stx #'id))
          #'(if id
              (kw id (clause* ...) body* ...)
-             #f)]
-        [(kw last () body* ...)
+             #F))
+        ((kw last () body* ...)
          (if (positive? (length #'(body* ...)))
            #'(begin body* ...)
-           #'last)])))
+           #'last)))))
 )

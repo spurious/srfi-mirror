@@ -1,5 +1,5 @@
-;;; simple test procedures
 #!r6rs
+;;; simple test procedures
 (import
   (rnrs)
   (rnrs mutable-pairs)
