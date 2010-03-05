@@ -1,17 +1,20 @@
 #!r6rs
-;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
+;; Copyright 2010 Derick Eddington.  My MIT-style license is in the file named
 ;; LICENSE from the original collection this file is distributed with.
 
 (library (srfi private platform-features)
   (export
-    OS-features
-    implementation-features)
+    expand-time-features
+    run-time-features)
   (import
     (rnrs)
     (only (ikarus) host-info)
     (srfi private OS-id-features))
-  
-  (define (OS-features)
+
+  (define (expand-time-features)
+    '(ikarus))
+
+  (define (run-time-features)
     (OS-id-features
      (host-info)
      '(("linux" linux posix)
@@ -22,7 +25,4 @@
        ("openbsd" openbsd posix)
        ("cygwin" cygwin posix)  ;; correct?
        ("gnu" gnu))))
-  
-  (define (implementation-features)
-    '(ikarus))
 )

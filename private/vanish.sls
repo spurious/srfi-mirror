@@ -9,15 +9,11 @@
     (rnrs)
     (for (only (rnrs base) begin) (meta -1)))
 
-  #;(define (show stx)
-    (display (make-string 60 #\-)) (newline)
-    (write (syntax->datum stx)) (newline))
-
   (define-syntax vanish-define
     (lambda (stx)
       (syntax-case stx ()
         ((_ def (vanish ...))
-         (for-all identifier? #'(vanish ...))
+         (for-all identifier? #'(def vanish ...))
          #'(make-vanish-define (syntax def) (syntax vanish) ...)))))
 
   (define (make-vanish-define def . to-vanish)
@@ -25,7 +21,6 @@
       (define (vanish? id)
         (memp (lambda (x) (free-identifier=? id x))
               to-vanish))
-      #;(show stx)
       (syntax-case stx ()
         ((_ name . _)
          (and (identifier? #'name)

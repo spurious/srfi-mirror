@@ -1,100 +1,3 @@
-;; R6RS port of the Scheme48 reference implementation of SRFI-27 
-
-; MODULE DEFINITION FOR SRFI-27
-; =============================
-; 
-; Sebastian.Egner@philips.com, Mar-2002, in Scheme 48 0.57
-
-; 1. The core generator is implemented in 'mrg32k3a-a.scm'.
-; 2. The generic parts of the interface are in 'mrg32k3a.scm'.
-; 3. The non-generic parts (record type, time, error) are here.
-
-; history of this file:
-;   SE, 22-Mar-2002: initial version
-;   SE, 27-Mar-2002: checked again
-;   JS, 06-Dec-2007: R6RS port
-
-(define-record-type :random-source
-  (fields state-ref
-          state-set!
-          randomize!
-          pseudo-randomize!
-          make-integers
-          make-reals))
-
-(define :random-source-make make-:random-source)
-(define state-ref :random-source-state-ref)
-(define state-set! :random-source-state-set!)
-(define randomize! :random-source-randomize!)
-(define pseudo-randomize! :random-source-pseudo-randomize!)
-(define make-integers :random-source-make-integers)
-(define make-reals :random-source-make-reals)
-
-(define (:random-source-current-time)
-  (time-nanosecond (current-time)))
-
-
-;;; mrg32k3a-a.ss
-
-; 54-BIT INTEGER IMPLEMENTATION OF THE "MRG32K3A"-GENERATOR
-; =========================================================
-;
-; Sebastian.Egner@philips.com, Mar-2002.
-;
-; This file is an implementation of Pierre L'Ecuyer's MRG32k3a
-; pseudo random number generator. Please refer to 'mrg32k3a.scm'
-; for more information.
-;
-; compliance:
-;   Scheme R5RS with integers covering at least {-2^53..2^53-1}.
-;
-; history of this file:
-;   SE, 18-Mar-2002: initial version
-;   SE, 22-Mar-2002: comments adjusted, range added
-;   SE, 25-Mar-2002: pack/unpack just return their argument
-
-; the actual generator
-
-(define (mrg32k3a-random-m1 state)
-  (let ((x11 (vector-ref state 0))
-        (x12 (vector-ref state 1))
-        (x13 (vector-ref state 2))
-        (x21 (vector-ref state 3))
-        (x22 (vector-ref state 4))
-        (x23 (vector-ref state 5)))
-    (let ((x10 (modulo (- (* 1403580 x12) (* 810728 x13)) 4294967087))
-          (x20 (modulo (- (* 527612 x21) (* 1370589 x23)) 4294944443)))
-      (vector-set! state 0 x10)
-      (vector-set! state 1 x11)
-      (vector-set! state 2 x12)
-      (vector-set! state 3 x20)
-      (vector-set! state 4 x21)
-      (vector-set! state 5 x22)
-      (modulo (- x10 x20) 4294967087))))
-
-; interface to the generic parts of the generator
-
-(define (mrg32k3a-pack-state unpacked-state)
-  unpacked-state)
-
-(define (mrg32k3a-unpack-state state)
-  state)
-
-(define (mrg32k3a-random-range) ; m1
-  4294967087)
-
-(define (mrg32k3a-random-integer state range) ; rejection method
-  (let* ((q (quotient 4294967087 range))
-         (qn (* q range)))
-    (do ((x (mrg32k3a-random-m1 state) (mrg32k3a-random-m1 state)))
-      ((< x qn) (quotient x q)))))
-
-(define (mrg32k3a-random-real state) ; normalization is 1/(m1+1)
-  (* 0.0000000002328306549295728 (+ 1.0 (mrg32k3a-random-m1 state))))
-
-
-;;; mrg32k3a.ss
-
 ; GENERIC PART OF MRG32k3a-GENERATOR FOR SRFI-27
 ; ==============================================
 ;
@@ -237,14 +140,14 @@
         (vector->list (mrg32k3a-unpack-state packed-state))))
 
 (define (mrg32k3a-state-set external-state)
-  
+
   (define (check-value x m)
     (if (and (integer? x)
              (exact? x)
              (<= 0 x (- m 1)))
         #t
         (error "illegal value" x)))
-  
+
   (if (and (list? external-state)
            (= (length external-state) 7)
            (eq? (car external-state) 'lecuyer-mrg32k3a))
@@ -303,7 +206,7 @@
 (define mrg32k3a-initial-state ; 0 3 6 9 12 15 of A^16, see below
   '#( 1062452522
       2961816100 
-      342112271 
+       342112271 
       2854655037 
       3321940838 
       3542344109))
@@ -311,13 +214,13 @@
 (define mrg32k3a-generators #f) ; computed when needed
 
 (define (mrg32k3a-pseudo-randomize-state i j)
-  
+
   (define (product A B) ; A*B in ((Z/m1*Z) x (Z/m2*Z))^(3x3)
-    
+
     (define w      65536) ; wordsize to split {0..2^32-1}
     (define w-sqr1 209)   ; w^2 mod m1
     (define w-sqr2 22853) ; w^2 mod m2
-    
+
     (define (lc i0 i1 i2 j0 j1 j2 m w-sqr) ; linear combination
       (let ((a0h (quotient (vector-ref A i0) w))
             (a0l (modulo   (vector-ref A i0) w))
@@ -367,46 +270,46 @@
      (lc 15 16 17   9 12 15  mrg32k3a-m2 w-sqr2)
      (lc 15 16 17  10 13 16  mrg32k3a-m2 w-sqr2)
      (lc 15 16 17  11 14 17  mrg32k3a-m2 w-sqr2)))
-  
+
   (define (power A e) ; A^e
     (cond
-      ((zero? e)
-       '#(1 0 0 0 1 0 0 0 1 1 0 0 0 1 0 0 0 1))
-      ((= e 1)
-       A)
-      ((even? e)
-       (power (product A A) (quotient e 2)))
-      (else
-       (product (power A (- e 1)) A))))
-  
+     ((zero? e)
+      '#(1 0 0 0 1 0 0 0 1 1 0 0 0 1 0 0 0 1))
+     ((= e 1)
+      A)
+     ((even? e)
+      (power (product A A) (quotient e 2)))
+     (else
+      (product (power A (- e 1)) A))))
+
   (define (power-power A b) ; A^(2^b)
     (if (zero? b)
         A
         (power-power (product A A) (- b 1))))
-  
+
   (define A                        ; the MRG32k3a recursion
     '#(     0 1403580 4294156359
-              1       0          0
-              0       1          0
-              527612       0 4293573854
-              1       0          0
-              0       1          0))
-  
+            1       0          0
+            0       1          0
+       527612       0 4293573854
+            1       0          0
+            0       1          0))
+
   ; check arguments
   (if (not (and (integer? i) 
                 (exact? i)
                 (integer? j)
                 (exact? j)))
       (error "i j must be exact integer" i j))
-  
+
   ; precompute A^(2^127) and A^(2^76) only once
-  
+
   (if (not mrg32k3a-generators)
       (set! mrg32k3a-generators
             (list (power-power A 127)
                   (power-power A  76)
                   (power A 16))))
-  
+
   ; compute M = A^(16 + i*2^127 + j*2^76)
   (let ((M (product 
             (list-ref mrg32k3a-generators 2)
@@ -435,26 +338,26 @@
 (define (mrg32k3a-randomize-state state)
   ;; G. Marsaglia's simple 16-bit generator with carry
   (let* ((m 65536)
-         (x (modulo (:random-source-current-time) m)))
+	 (x (modulo (:random-source-current-time) m)))
     (define (random-m)
       (let ((y (modulo x m)))
-        (set! x (+ (* 30903 y) (quotient x m)))
-        y))
+	(set! x (+ (* 30903 y) (quotient x m)))
+	y))
     (define (random n)			; m < n < m^2
       (modulo (+ (* (random-m) m) (random-m)) n))
-    
-    ; modify the state
+
+					; modify the state
     (let ((m1 mrg32k3a-m1)
-          (m2 mrg32k3a-m2)
-          (s (mrg32k3a-unpack-state state)))
+	  (m2 mrg32k3a-m2)
+	  (s (mrg32k3a-unpack-state state)))
       (mrg32k3a-pack-state
        (vector
-        (+ 1 (modulo (+ (vector-ref s 0) (random (- m1 1))) (- m1 1)))
-        (modulo (+ (vector-ref s 1) (random m1)) m1)
-        (modulo (+ (vector-ref s 2) (random m1)) m1)
-        (+ 1 (modulo (+ (vector-ref s 3) (random (- m2 1))) (- m2 1)))
-        (modulo (+ (vector-ref s 4) (random m2)) m2)
-        (modulo (+ (vector-ref s 5) (random m2)) m2))))))
+	(+ 1 (modulo (+ (vector-ref s 0) (random (- m1 1))) (- m1 1)))
+	(modulo (+ (vector-ref s 1) (random m1)) m1)
+	(modulo (+ (vector-ref s 2) (random m1)) m1)
+	(+ 1 (modulo (+ (vector-ref s 3) (random (- m2 1))) (- m2 1)))
+	(modulo (+ (vector-ref s 4) (random m2)) m2)
+	(modulo (+ (vector-ref s 5) (random m2)) m2))))))
 
 
 ; Large Integers
@@ -477,12 +380,12 @@
 (define (mrg32k3a-random-large state n) ; n > m-max
   (do ((k 2 (+ k 1))
        (mk (* mrg32k3a-m-max mrg32k3a-m-max) (* mk mrg32k3a-m-max)))
-    ((>= mk n)
-     (let* ((mk-by-n (quotient mk n))
-            (a (* mk-by-n n)))
-       (do ((x (mrg32k3a-random-power state k)
-               (mrg32k3a-random-power state k)))
-         ((< x a) (quotient x mk-by-n)))))))
+      ((>= mk n)
+       (let* ((mk-by-n (quotient mk n))
+              (a (* mk-by-n n)))
+         (do ((x (mrg32k3a-random-power state k)
+                 (mrg32k3a-random-power state k)))
+             ((< x a) (quotient x mk-by-n)))))))
 
 
 ; Multiple Precision Reals
@@ -497,9 +400,9 @@
 (define (mrg32k3a-random-real-mp state unit)
   (do ((k 1 (+ k 1))
        (u (- (/ 1 unit) 1) (/ u mrg32k3a-m1)))
-    ((<= u 1)
-     (/ (exact->inexact (+ (mrg32k3a-random-power state k) 1))
-        (exact->inexact (+ (expt mrg32k3a-m-max k) 1))))))
+      ((<= u 1)
+       (/ (exact->inexact (+ (mrg32k3a-random-power state k) 1))
+          (exact->inexact (+ (expt mrg32k3a-m-max k) 1))))))
 
 
 ; Provide the Interface as Specified in the SRFI
@@ -524,30 +427,30 @@
      (lambda ()
        (lambda (n)
          (cond
-           ((not (and (integer? n) (exact? n) (positive? n)))
-            (error "range must be exact positive integer" n))           
-           ((<= n mrg32k3a-m-max)
-            (mrg32k3a-random-integer state n))
-           (else
-            (mrg32k3a-random-large state n)))))
+          ((not (and (integer? n) (exact? n) (positive? n)))
+           (error "range must be exact positive integer" n))           
+          ((<= n mrg32k3a-m-max)
+           (mrg32k3a-random-integer state n))
+          (else
+           (mrg32k3a-random-large state n)))))
      (lambda args
        (cond
-         ((null? args)
-          (lambda () 
-            (mrg32k3a-random-real state)))
-         ((null? (cdr args))
-          (let ((unit (car args)))
-            (cond
-              ((not (and (real? unit) (< 0 unit 1)))
-               (error "unit must be real in (0,1)" unit))
-              ((<= (- (/ 1 unit) 1) mrg32k3a-m1)
-               (lambda () 
-                 (mrg32k3a-random-real state)))
-              (else
-               (lambda () 
-                 (mrg32k3a-random-real-mp state unit))))))
-         (else
-          (error "illegal arguments" args)))))))
+        ((null? args)
+         (lambda () 
+           (mrg32k3a-random-real state)))
+        ((null? (cdr args))
+         (let ((unit (car args)))
+           (cond
+            ((not (and (real? unit) (< 0 unit 1)))
+             (error "unit must be real in (0,1)" unit))
+            ((<= (- (/ 1 unit) 1) mrg32k3a-m1)
+             (lambda () 
+               (mrg32k3a-random-real state)))
+            (else
+             (lambda () 
+               (mrg32k3a-random-real-mp state unit))))))
+        (else
+         (error "illegal arguments" args)))))))
 
 (define random-source? 
   :random-source?)

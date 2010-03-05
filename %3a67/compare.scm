@@ -1,6 +1,3 @@
-; (define current-compare (make-parameter default-compare))
-; (provide current-compare)
-
 ; Copyright (c) 2005 Sebastian Egner and Jens Axel S{\o}gaard.
 ; 
 ; Permission is hereby granted, free of charge, to any person obtaining
@@ -151,13 +148,13 @@
     ((compare:define-rel? rel? if-rel?)
      (define rel?
        (case-lambda
-         (()        (lambda (x y) (if-rel? (default-compare x y) #t #f)))
-         ((compare) (lambda (x y) (if-rel? (compare         x y) #t #f)))
-         ((x y)                   (if-rel? (default-compare x y) #t #f))
-         ((compare x y)
-          (if (procedure? compare)
-              (if-rel? (compare x y) #t #f)
-              (error "not a procedure (Did you mean rel/rel??): " compare))))))))
+	(()        (lambda (x y) (if-rel? (default-compare x y) #t #f)))
+	((compare) (lambda (x y) (if-rel? (compare         x y) #t #f)))
+	((x y)                   (if-rel? (default-compare x y) #t #f))
+	((compare x y)
+	 (if (procedure? compare)
+	     (if-rel? (compare x y) #t #f)
+	     (error "not a procedure (Did you mean rel/rel??): " compare))))))))
 
 (compare:define-rel? =?    if=?)
 (compare:define-rel? <?    if<?)
@@ -174,24 +171,24 @@
     ((compare:define-rel1/rel2? rel1/rel2? if-rel1? if-rel2?)
      (define rel1/rel2?
        (case-lambda
-         (()
-          (lambda (x y z)
-            (if-rel1? (default-compare x y)
-                      (if-rel2? (default-compare y z) #t #f)
-                      (compare:checked #f default-compare z))))
-         ((compare)
-          (lambda (x y z)
-            (if-rel1? (compare x y)
-                      (if-rel2? (compare y z) #t #f)
-                      (compare:checked #f compare z))))
-         ((x y z)
-          (if-rel1? (default-compare x y)
-                    (if-rel2? (default-compare y z) #t #f)
-                    (compare:checked #f default-compare z)))
-         ((compare x y z)
-          (if-rel1? (compare x y)
-                    (if-rel2? (compare y z) #t #f)
-                    (compare:checked #f compare z))))))))
+	(()
+	 (lambda (x y z)
+	   (if-rel1? (default-compare x y)
+		     (if-rel2? (default-compare y z) #t #f)
+		     (compare:checked #f default-compare z))))
+	((compare)
+	 (lambda (x y z)
+	   (if-rel1? (compare x y)
+		(if-rel2? (compare y z) #t #f)
+		(compare:checked #f compare z))))
+	((x y z)
+	 (if-rel1? (default-compare x y)
+	       (if-rel2? (default-compare y z) #t #f)
+	       (compare:checked #f default-compare z)))
+	((compare x y z)
+	 (if-rel1? (compare x y)
+	       (if-rel2? (compare y z) #t #f)
+	       (compare:checked #f compare z))))))))
 
 (compare:define-rel1/rel2? </<?   if<?  if<?)
 (compare:define-rel1/rel2? </<=?  if<?  if<=?)
@@ -210,26 +207,26 @@
     ((compare:define-chain-rel? chain-rel? if-rel?)
      (define chain-rel?
        (case-lambda
-         ((compare)
-          #t)
-         ((compare x1)
-          (compare:checked #t compare x1))
-         ((compare x1 x2)
-          (if-rel? (compare x1 x2) #t #f))
-         ((compare x1 x2 x3)
-          (if-rel? (compare x1 x2)
-                   (if-rel? (compare x2 x3) #t #f)
-                   (compare:checked #f compare x3)))
-         ((compare x1 x2 . x3+)
-          (if-rel? (compare x1 x2)
-                   (let chain? ((head x2) (tail x3+))
-                     (if (null? tail)
-                         #t
-                         (if-rel? (compare head (car tail))
-                                  (chain? (car tail) (cdr tail))
-                                  (apply compare:checked #f 
-                                         compare (cdr tail)))))
-                   (apply compare:checked #f compare x3+))))))))
+	((compare)
+	 #t)
+	((compare x1)
+	 (compare:checked #t compare x1))
+	((compare x1 x2)
+	 (if-rel? (compare x1 x2) #t #f))
+	((compare x1 x2 x3)
+	 (if-rel? (compare x1 x2)
+		  (if-rel? (compare x2 x3) #t #f)
+		  (compare:checked #f compare x3)))
+	((compare x1 x2 . x3+)
+	 (if-rel? (compare x1 x2)
+		  (let chain? ((head x2) (tail x3+))
+		    (if (null? tail)
+			#t
+			(if-rel? (compare head (car tail))
+				 (chain? (car tail) (cdr tail))
+				 (apply compare:checked #f 
+					compare (cdr tail)))))
+		  (apply compare:checked #f compare x3+))))))))
 
 (compare:define-chain-rel? chain=?  if=?)
 (compare:define-chain-rel? chain<?  if<?)
@@ -254,13 +251,13 @@
                  (if-not=? (compare x2 x3)
                            (if-not=? (compare x1 x3) #t #f)
                            #f)
-                 (compare:checked #f compare x3)))
+		 (compare:checked #f compare x3)))
       ((compare . x1+)
        (let unequal? ((x x1+) (n (length x1+)) (unchecked? #t))
          (if (< n 2)
-             (if (and unchecked? (= n 1))
-                 (compare:checked #t compare (car x))
-                 #t)
+	     (if (and unchecked? (= n 1))
+		 (compare:checked #t compare (car x))
+		 #t)
              (let* ((i-pivot (random-integer n))
                     (x-pivot (list-ref x i-pivot)))
                (let split ((i 0) (x x) (x< '()) (x> '()))
@@ -271,9 +268,9 @@
                          (split (+ i 1) (cdr x) x< x>)
                          (if3 (compare (car x) x-pivot)
                               (split (+ i 1) (cdr x) (cons (car x) x<) x>)
-                              (if unchecked?
-                                  (apply compare:checked #f compare (cdr x))
-                                  #f)
+			      (if unchecked?
+				  (apply compare:checked #f compare (cdr x))
+				  #f)
                               (split (+ i 1) (cdr x) x< (cons (car x) x>)))))))))))))
 
 
@@ -391,33 +388,33 @@
 
 (define compare-by<
   (case-lambda
-    ((lt)     (lambda (x y) (if (lt x y) -1 (if (lt y x)  1 0))))
-    ((lt x y)               (if (lt x y) -1 (if (lt y x)  1 0)))))
+   ((lt)     (lambda (x y) (if (lt x y) -1 (if (lt y x)  1 0))))
+   ((lt x y)               (if (lt x y) -1 (if (lt y x)  1 0)))))
 
 (define compare-by>
   (case-lambda
-    ((gt)     (lambda (x y) (if (gt x y) 1 (if (gt y x)  -1 0))))
-    ((gt x y)               (if (gt x y) 1 (if (gt y x)  -1 0)))))
+   ((gt)     (lambda (x y) (if (gt x y) 1 (if (gt y x)  -1 0))))
+   ((gt x y)               (if (gt x y) 1 (if (gt y x)  -1 0)))))
 
 (define compare-by<=
   (case-lambda
-    ((le)     (lambda (x y) (if (le x y) (if (le y x) 0 -1) 1)))
-    ((le x y)               (if (le x y) (if (le y x) 0 -1) 1))))
+   ((le)     (lambda (x y) (if (le x y) (if (le y x) 0 -1) 1)))
+   ((le x y)               (if (le x y) (if (le y x) 0 -1) 1))))
 
 (define compare-by>=
   (case-lambda
-    ((ge)     (lambda (x y) (if (ge x y) (if (ge y x) 0 1) -1)))
-    ((ge x y)               (if (ge x y) (if (ge y x) 0 1) -1))))
+   ((ge)     (lambda (x y) (if (ge x y) (if (ge y x) 0 1) -1)))
+   ((ge x y)               (if (ge x y) (if (ge y x) 0 1) -1))))
 
 (define compare-by=/<
   (case-lambda
-    ((eq lt)     (lambda (x y) (if (eq x y) 0 (if (lt x y) -1 1))))
-    ((eq lt x y)               (if (eq x y) 0 (if (lt x y) -1 1)))))
+   ((eq lt)     (lambda (x y) (if (eq x y) 0 (if (lt x y) -1 1))))
+   ((eq lt x y)               (if (eq x y) 0 (if (lt x y) -1 1)))))
 
 (define compare-by=/>
   (case-lambda
-    ((eq gt)     (lambda (x y) (if (eq x y) 0 (if (gt x y) 1 -1))))
-    ((eq gt x y)               (if (eq x y) 0 (if (gt x y) 1 -1)))))
+   ((eq gt)     (lambda (x y) (if (eq x y) 0 (if (gt x y) 1 -1))))
+   ((eq gt x y)               (if (eq x y) 0 (if (gt x y) 1 -1)))))
 
 ; refine and extend construction
 
@@ -476,14 +473,14 @@
     ((compare:define-by=/< compare = < type? type-name)
      (define compare
        (let ((= =) (< <))
-         (lambda (x y)
-           (if (type? x)
-               (if (eq? x y)
-                   0
-                   (if (type? y)
-                       (if (= x y) 0 (if (< x y) -1 1))
-                       (error (string-append "not " type-name ":") y)))
-               (error (string-append "not " type-name ":") x))))))))
+	 (lambda (x y)
+	   (if (type? x)
+	       (if (eq? x y)
+		   0
+		   (if (type? y)
+		       (if (= x y) 0 (if (< x y) -1 1))
+		       (error (string-append "not " type-name ":") y)))
+	       (error (string-append "not " type-name ":") x))))))))
 
 (define (boolean-compare x y)
   (compare:type-check boolean? "boolean" x y)
@@ -632,7 +629,7 @@
    x y
    (null?    0)
    (pair?    (default-compare (car x) (car y))
-             (default-compare (cdr x) (cdr y)))
+	     (default-compare (cdr x) (cdr y)))
    (boolean? (boolean-compare x y))
    (char?    (char-compare    x y))
    (string?  (string-compare  x y))
@@ -680,31 +677,31 @@
   (let ((z? #f) (z #f)) ; stored element from previous call
     (lambda (x y)
       (let ((c-xx (checked-value c x x))
-            (c-yy (checked-value c y y))
-            (c-xy (checked-value c x y))
-            (c-yx (checked-value c y x)))
-        (if (not (zero? c-xx))
-            (error "compare error: not reflexive" c x))
-        (if (not (zero? c-yy))
-            (error "compare error: not reflexive" c y))
-        (if (not (zero? (+ c-xy c-yx)))
-            (error "compare error: not anti-symmetric" c x y))
-        (if z?
-            (let ((c-xz (checked-value c x z))
-                  (c-zx (checked-value c z x))
-                  (c-yz (checked-value c y z))
-                  (c-zy (checked-value c z y)))
-              (if (not (zero? (+ c-xz c-zx)))
-                  (error "compare error: not anti-symmetric" c x z))
-              (if (not (zero? (+ c-yz c-zy)))
-                  (error "compare error: not anti-symmetric" c y z))
-              (let ((ijk (vector-ref q (+ c-xy (* 3 c-yz) (* 9 c-xz) 13))))
-                (if (list? ijk)
-                    (apply error
-                           "compare error: not transitive"
-                           c 
-                           (map (lambda (i) (case i ((x) x) ((y) y) ((z) z)))
-                                ijk)))))
-            (set! z? #t))
-        (set! z (if (random-boolean) x y)) ; randomized testing
-        c-xy))))
+	    (c-yy (checked-value c y y))
+	    (c-xy (checked-value c x y))
+	    (c-yx (checked-value c y x)))
+	(if (not (zero? c-xx))
+	    (error "compare error: not reflexive" c x))
+	(if (not (zero? c-yy))
+	    (error "compare error: not reflexive" c y))
+	(if (not (zero? (+ c-xy c-yx)))
+	    (error "compare error: not anti-symmetric" c x y))
+	(if z?
+	    (let ((c-xz (checked-value c x z))
+		  (c-zx (checked-value c z x))
+		  (c-yz (checked-value c y z))
+		  (c-zy (checked-value c z y)))
+	      (if (not (zero? (+ c-xz c-zx)))
+		  (error "compare error: not anti-symmetric" c x z))
+	      (if (not (zero? (+ c-yz c-zy)))
+		  (error "compare error: not anti-symmetric" c y z))
+	      (let ((ijk (vector-ref q (+ c-xy (* 3 c-yz) (* 9 c-xz) 13))))
+		(if (list? ijk)
+		    (apply error
+			   "compare error: not transitive"
+			   c 
+			   (map (lambda (i) (case i ((x) x) ((y) y) ((z) z)))
+				ijk)))))
+	    (set! z? #t))
+	(set! z (if (random-boolean) x y)) ; randomized testing
+	c-xy))))

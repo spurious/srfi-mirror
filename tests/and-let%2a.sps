@@ -1,8 +1,8 @@
 #!r6rs
-;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
+;; Copyright 2010 Derick Eddington.  My MIT-style license is in the file named
 ;; LICENSE from the original collection this file is distributed with.
 
-(import 
+(import
   (rnrs)
   (rnrs eval)
   (srfi :2 and-let*)
@@ -16,12 +16,13 @@
 (define-syntax must-be-a-syntax-error
   (syntax-rules ()
     ((_ expr)
-     (check 
-       (guard (ex (#T (syntax-violation? ex)))  
-         (eval 'expr (environment '(rnrs) '(srfi :2 and-let*))))
+     (check
+       (guard (ex (#T (syntax-violation? ex)))
+         (eval 'expr (environment '(rnrs) '(srfi :2 and-let*)))
+         'unexpected-return)
        => #T))))
 
-;; Taken straight from the reference implementation tests
+;; Taken from the reference implementation tests
 
 (expect  (and-let* () 1) 1)
 (expect  (and-let* () 1 2) 2)
@@ -45,8 +46,7 @@
 (expect (let ((x 1)) (and-let* (((positive? x))) )) #T)
 (expect (let ((x 0)) (and-let* (((positive? x))) (+ x 1))) #F)
 (expect (let ((x 1)) (and-let* (((positive? x)) (x (+ x 1))) (+ x 1)))  3)
-;; This next one is from the reference implementation tests
-;; but I can't see how it "must be a syntax-error".
+;; Derick thinks variable shadowing should be allowed, because it's a "let*".
 #;(must-be-a-syntax-error
   (let ((x 1)) (and-let* (((positive? x)) (x (+ x 1)) (x (+ x 1))) (+ x 1))))
 
@@ -60,5 +60,20 @@
 (expect  (let ((x 0)) (and-let* (x (y (- x 1)) ((positive? y))) (/ x y))) #F)
 (expect  (let ((x #F)) (and-let* (x (y (- x 1)) ((positive? y))) (/ x y))) #F)
 (expect  (let ((x 3)) (and-let* (x (y (- x 1)) ((positive? y))) (/ x y))) 3/2)
+
+;; Derick's additional tests
+
+(must-be-a-syntax-error (and-let* (("oops" 1))))
+(must-be-a-syntax-error (and-let* ((x 1 2))))
+(must-be-a-syntax-error (and-let* ((x 1) . oops)))
+(expect (let ((x 1))
+          (and-let* ((x (+ x 1))
+                     (x (+ x 1))
+                     (x (+ x 1)))
+            (+ x 1)))
+        5)
+(expect (and-let* () (define x 1) (- x)) -1)
+(expect (and-let* ((x 2) (y (+ 1 x))) (define z (* x y)) (/ z)) 1/6)
+
 
 (check-report)

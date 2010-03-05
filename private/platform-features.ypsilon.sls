@@ -1,17 +1,20 @@
 #!r6rs
-;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
+;; Copyright 2010 Derick Eddington.  My MIT-style license is in the file named
 ;; LICENSE from the original collection this file is distributed with.
 
 (library (srfi private platform-features)
   (export
-    OS-features
-    implementation-features)
+    expand-time-features
+    run-time-features)
   (import
     (rnrs)
     (only (core) architecture-feature)
     (srfi private OS-id-features))
-  
-  (define (OS-features)
+
+  (define (expand-time-features)
+    '(ypsilon))
+
+  (define (run-time-features)
     (OS-id-features
      (architecture-feature 'operating-system)
      '(("linux" linux posix)
@@ -21,7 +24,4 @@
        ("freebsd" freebsd posix)
        ("openbsd" openbsd posix)
        ("windows" windows))))
-  
-  (define (implementation-features)
-    '(ypsilon))
 )

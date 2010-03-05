@@ -195,7 +195,7 @@
 
 ;; Not part of the specification.  FIXME
 ;; Controls whether a log file is generated.
-(define test-log-to-file #F)
+(define test-log-to-file #t)
 
 (define (test-runner-simple)
   (let ((runner (%test-runner-alloc)))

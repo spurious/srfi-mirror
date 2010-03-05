@@ -65,7 +65,9 @@
     (case-lambda
       (() test-log-to-file)
       ((val) (set! test-log-to-file val))))
-  
+
   (SRFI-23-error->R6RS "(library (srfi :64 testing))"
    (include/resolve ("srfi" "%3a64") "testing.scm"))
+
+  (set! test-log-to-file #F)
 )

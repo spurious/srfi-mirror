@@ -1,3 +1,4 @@
+#!r6rs
 ;; Copyright (C) William D Clinger 2008. All Rights Reserved.
 ;;
 ;; Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,7 +19,6 @@
 ;; CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 ;; SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#!r6rs
 (library (srfi :99 records syntactic)
 
   (export define-record-type)
@@ -187,19 +187,19 @@
                              (else (complain))))
                      fspecs
                      (syntax->list #'field-specs)))
-
+  
                (fields (list->vector (map cadr field-specs)))
-
+  
                (accessor-fields
                 (map (lambda (x) (list (caddr x) (cadr x)))
                      (filter (lambda (x) (>= (length x) 3))
                              field-specs)))
-
+  
                (mutator-fields
                 (map (lambda (x) (list (cadddr x) (cadr x)))
                      (filter (lambda (x) (= (length x) 4))
                              field-specs))))
-
+  
           (construct-record-type-definitions
            #'tname
            fields
@@ -208,22 +208,22 @@
            predicate-name
            accessor-fields
            mutator-fields))))))
-
+  
   (define-syntax define-record-type-helper
     (syntax-rules ()
-
+  
      ((_ type-name fields parent #f predicate
          ((accessor field) ...) ((mutator mutable-field) ...))
       (define-record-type-helper
        type-name fields parent ignored predicate
        ((accessor field) ...) ((mutator mutable-field) ...)))
-
+  
      ((_ type-name fields parent constructor #f
          ((accessor field) ...) ((mutator mutable-field) ...))
       (define-record-type-helper
        type-name fields parent constructor ignored
        ((accessor field) ...) ((mutator mutable-field) ...)))
-
+  
      ((_ type-name fields parent (constructor args) predicate
          ((accessor field) ...) ((mutator mutable-field) ...))
       (begin (define type-name (make-rtd 'type-name 'fields parent))
@@ -233,7 +233,7 @@
              ...
              (define mutator (rtd-mutator type-name 'mutable-field))
              ...))
-
+  
      ((_ type-name fields parent constructor predicate
          ((accessor field) ...) ((mutator mutable-field) ...))
       (begin (define type-name (make-rtd 'type-name 'fields parent))
@@ -244,4 +244,4 @@
              (define mutator (rtd-mutator type-name 'mutable-field))
              ...))))
 
-)
+  ) ; srfi :99 records syntactic

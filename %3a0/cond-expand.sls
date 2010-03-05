@@ -3,17 +3,17 @@
 ;; LICENSE from the original collection this file is distributed with.
 
 (library (srfi :0 cond-expand)
-  (export 
+  (export
     cond-expand)
   (import
     (rnrs)
-    (for (srfi private registry) expand))
-  
+    (for (only (srfi private registry) expand-time-features) expand))
+
   (define-syntax cond-expand
     (lambda (stx)
       (syntax-case stx (and or not else)
-        ((_) 
-         (syntax-violation #F "Unfulfilled cond-expand" stx))
+        ((_)
+         (syntax-violation #F "unfulfilled cond-expand" stx))
         ((_ (else body ...))
          #'(begin body ...))
         ((_ ((and) body ...) more-clauses ...)
@@ -41,8 +41,8 @@
              (cond-expand more-clauses ...))
             (else body ...)))
         ((_ (feature-id body ...) more-clauses ...)
-         (if (member (syntax->datum #'feature-id) available-features)
+         (if (member (syntax->datum #'feature-id) expand-time-features)
            #'(begin body ...)
            #'(cond-expand more-clauses ...))))))
-  
+
 )
