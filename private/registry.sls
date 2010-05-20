@@ -44,7 +44,7 @@
           (42   eager-comprehensions)
           (43   vectors)
         #;(44   collections)
-        #;(45   lazy)
+          (45   lazy)
         #;(46   syntax-rules)
         #;(47   arrays)
           (48   intermediate-format-strings)
