@@ -1,6 +1,6 @@
 #!r6rs
-;; Copyright (C) André van Tonder (2003, 2010). All Rights Reserved.
-
+;; Copyright André van Tonder. All Rights Reserved.
+;;
 ;; Permission is hereby granted, free of charge, to any person
 ;; obtaining a copy of this software and associated documentation
 ;; files (the "Software"), to deal in the Software without
@@ -8,10 +8,10 @@
 ;; modify, merge, publish, distribute, sublicense, and/or sell copies
 ;; of the Software, and to permit persons to whom the Software is
 ;; furnished to do so, subject to the following conditions:
-
+;;
 ;; The above copyright notice and this permission notice shall be
 ;; included in all copies or substantial portions of the Software.
-
+;;
 ;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 ;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 ;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -21,9 +21,7 @@
 ;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-;=========================================================================
-; TESTS AND BENCHMARKS:
-;=========================================================================
+;; Modified by Andreas Rottmann to be an R6RS program.
 
 (import (rnrs)
         (only (rnrs r5rs) modulo)
@@ -36,13 +34,19 @@
      (test-equal expected
        (call-with-string-output-port proc)))))
 
-(define (test-leak thunk)
-  (display
-   "Leak test, please watch memory consumption; press C-c when satisfied\n")
-  (guard (c (#t 'aborted))
-    (thunk)))
+(define-syntax test-leak
+  (syntax-rules ()
+    ((_ expr)
+     (begin
+       (display "Leak test, please watch memory consumption; press C-c when satisfied.\n")
+       (guard (c (#t 'aborted))
+         expr)))))
 
 (test-begin "lazy-tests")
+
+;=========================================================================
+; TESTS AND BENCHMARKS:
+;=========================================================================
 
 ;=========================================================================
 ; Memoization test 1:
@@ -51,7 +55,7 @@
   (lambda (port)
     (define s (delay (begin (display 'hello port) 1)))
     (test-equal 1 (force s))
-    (force s)))
+    (test-equal 1 (force s))))
 
 ;=========================================================================
 ; Memoization test 2:
@@ -145,7 +149,7 @@
 ; Leak test 1: Infinite loop in bounded space.
 
 (define (loop) (lazy (loop)))
-(test-leak (lambda () (force (loop))))   ;==> bounded space
+(test-leak (force (loop)))   ;==> bounded space
 
 ;=========================================================================
 ; Leak test 2: Pending memos should not accumulate
@@ -153,7 +157,7 @@
 
 (let ()
   (define s (loop))
-  (test-leak (lambda () (force s))))     ;==> bounded space
+  (test-leak (force s)))     ;==> bounded space
 
 ;=========================================================================
 ; Leak test 3: Safely traversing infinite stream.
@@ -164,7 +168,7 @@
 (define (traverse s)
   (lazy (traverse (cdr (force s)))))
 
-(test-leak (lambda () (force (traverse (from 0)))))         ;==> bounded space
+(test-leak (force (traverse (from 0))))         ;==> bounded space
 
 ;=========================================================================
 ; Leak test 4: Safely traversing infinite stream
@@ -172,7 +176,7 @@
 
 (let ()
   (define s (traverse (from 0)))
-  (test-leak (lambda () (force s))))     ;==> bounded space
+  (test-leak (force s)))     ;==> bounded space
 
 ;=========================================================================
 ; Convenient list deconstructor used below.
@@ -201,10 +205,8 @@
                        (stream-filter p? t))))))
 
 (test-leak
- (lambda ()
-   (force (stream-filter (lambda (n) (= n 10000000000))
-                         (from 0)))))
-                                        ;==> bounded space
+ (force (stream-filter (lambda (n) (= n 10000000000))
+                       (from 0))))                     ;==> bounded space
 
 ;========================================================================
 ; Leak test 6: Another long traversal should run in bounded space.
@@ -230,7 +232,7 @@
 
 (let ()
   (define s (stream-ref (from 0) 100000000))
-  (test-leak (lambda () (force s))))     ;==> bounded space
+  (test-equal 100000000 (force s)))     ;==> bounded space
 
 ;======================================================================
 ; Leak test 7: Infamous example from SRFI 40.
@@ -241,12 +243,7 @@
                (from 0))
               3))
 
-(force (times3 7))
-(test-leak (lambda ()
-             (force (times3 100000000)))) ;==> bounded space
+(test-equal 21 (force (times3 7)))
+(test-equal 300000000 (force (times3 100000000)))    ;==> bounded space
 
 (test-end "lazy-tests")
-
-;; Local Variables:
-;; scheme-indent-styles: ((test-output 1) (test-equal 1))
-;; End:
